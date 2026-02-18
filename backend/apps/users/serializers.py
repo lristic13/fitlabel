@@ -45,6 +45,11 @@ class RegisterSerializer(serializers.Serializer):
         return user
 
 
+class TokenResponseSerializer(serializers.Serializer):
+    access = serializers.CharField()
+    refresh = serializers.CharField()
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     tenant_slug = serializers.CharField(source="tenant.slug", read_only=True)
 

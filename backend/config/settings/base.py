@@ -36,9 +36,15 @@ INSTALLED_APPS = [
     # Third-party
     "rest_framework",
     "corsheaders",
+    "drf_spectacular",
     # Local apps
     "apps.tenants",
     "apps.users",
+    "apps.media_library",
+    "apps.workouts",
+    "apps.programs",
+    "apps.progress",
+    "apps.content",
 ]
 
 MIDDLEWARE = [
@@ -130,6 +136,17 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "common.pagination.CursorPagination",
     "PAGE_SIZE": 20,
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# ---------------------------------------------------------------------------
+# drf-spectacular (API docs)
+# ---------------------------------------------------------------------------
+SPECTACULAR_SETTINGS = {
+    "TITLE": "FitLabel API",
+    "DESCRIPTION": "White-label fitness app platform API",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 # ---------------------------------------------------------------------------

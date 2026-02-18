@@ -1,3 +1,4 @@
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -16,6 +17,18 @@ class TenantConfigView(APIView):
 
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="X-Tenant-Slug",
+                location=OpenApiParameter.HEADER,
+                required=True,
+                type=str,
+                description="The tenant's unique slug (e.g. 'test-gym')",
+            ),
+        ],
+        responses={200: TenantBrandingSerializer},
+    )
     def get(self, request):
         # Try header first, then subdomain
         slug = request.headers.get("X-Tenant-Slug")

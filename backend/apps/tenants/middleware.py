@@ -15,7 +15,7 @@ class TenantMiddleware:
     comes from the request body).
     """
 
-    EXEMPT_PREFIXES = ("/admin/", "/v1/auth/", "/__debug__/")
+    EXEMPT_PREFIXES = ("/admin/", "/v1/auth/", "/__debug__/", "/api/")
 
     def __init__(self, get_response):
         self.get_response = get_response
