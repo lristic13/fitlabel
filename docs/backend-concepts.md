@@ -20,6 +20,15 @@ A running log of backend concepts and patterns used while building FitLabel. Eac
 12. [Environment Variables](#12-environment-variables)
 13. [Cursor Pagination](#13-cursor-pagination)
 14. [API Documentation (OpenAPI/Swagger)](#14-api-documentation-openapiswagger)
+15. [Generic Views](#15-generic-views-listcreateapiview-retrieveapiview)
+16. [Lean List, Rich Detail](#16-lean-list-rich-detail-api-response-design)
+17. [Nested Serializers](#17-nested-serializers-tree-structures-in-one-request)
+18. [select_related vs prefetch_related](#18-select_related-vs-prefetch_related-n1-query-prevention)
+19. [Idempotent Endpoints](#19-idempotent-endpoints-safe-to-retry)
+20. [bulk_create](#20-bulk_create-batch-database-inserts)
+21. [Database Aggregation](#21-database-aggregation-aggregate-and-annotate)
+22. [Streak Calculation](#22-streak-calculation-when-sql-isnt-the-best-tool)
+23. [get_object_or_404](#23-get_object_or_404-clean-error-handling)
 
 ---
 
@@ -362,6 +371,288 @@ This keeps the docs accurate without maintaining a separate spec file.
 
 ---
 
+## 15. Generic Views (ListAPIView, RetrieveAPIView)
+
+**What:** DRF provides pre-built view classes that handle common patterns so you don't rewrite the same logic.
+
+**Where:** `apps/workouts/views.py`, `apps/programs/views.py`, `apps/content/views.py`, `apps/progress/views.py`
+
+```python
+class ExerciseListView(ListAPIView):
+    serializer_class = ExerciseListSerializer
+
+    def get_queryset(self):
+        return Exercise.objects.filter(tenant=self.request.tenant)
+
+
+class ExerciseDetailView(RetrieveAPIView):
+    serializer_class = ExerciseDetailSerializer
+
+    def get_queryset(self):
+        return Exercise.objects.filter(tenant=self.request.tenant)
+```
+
+**What each class gives you for free:**
+| Class | HTTP Method | What it does |
+|---|---|---|
+| `ListAPIView` | GET | Queryset → serialization → pagination → response |
+| `RetrieveAPIView` | GET | Lookup by pk → serialization → response (or 404) |
+| `APIView` | Any | Raw view — you handle everything manually |
+
+**When to use which:**
+- **Generic views** (`ListAPIView`, `RetrieveAPIView`): Standard CRUD with a queryset. Pagination, serialization, and 404 handling are automatic.
+- **`APIView`**: Custom logic that doesn't fit the queryset pattern (e.g., enrolling in a program, starting a workout, computing stats). You write the full method.
+
+**Why `get_queryset()` instead of `queryset = ...`:** The queryset attribute is evaluated once at import time. `get_queryset()` runs per-request, so it can access `self.request.tenant` to filter by the current tenant. If you used `queryset = Exercise.objects.all()`, there would be no tenant filtering.
+
+---
+
+## 16. Lean List, Rich Detail (API Response Design)
+
+**What:** List endpoints return minimal fields. Detail endpoints return everything. The same model gets two different serializers.
+
+**Where:** Every app with list + detail endpoints
+
+```python
+# List: just enough to render a card in the mobile app
+class ExerciseListSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ["id", "name", "muscle_groups", "equipment", "demo_image"]
+
+# Detail: full data when user taps into it
+class ExerciseDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ["id", "name", "description", "demo_video", "demo_image",
+                  "muscle_groups", "equipment", "instructions"]
+```
+
+**Why:** A list loads 20 items at once. If each item carried full descriptions, instructions, and video URLs, that's a lot of wasted bandwidth — especially on mobile. The app shows a scrollable list of cards (name + thumbnail), then fetches the full detail only when the user taps one.
+
+**Applied consistently across:**
+| App | List omits | Detail includes |
+|---|---|---|
+| Exercises | description, instructions, video | Everything |
+| Programs | description, weeks/days tree | Full nested structure |
+| Posts | body (could be thousands of chars of markdown) | Full body |
+
+---
+
+## 17. Nested Serializers (Tree Structures in One Request)
+
+**What:** Serializers containing other serializers, building a tree structure from a single API call.
+
+**Where:** `apps/programs/serializers.py`, `apps/workouts/serializers.py`
+
+```python
+class ProgramDaySerializer(serializers.ModelSerializer):
+    ...
+
+class ProgramWeekSerializer(serializers.ModelSerializer):
+    days = ProgramDaySerializer(many=True, read_only=True)   # nested
+
+class ProgramDetailSerializer(serializers.ModelSerializer):
+    weeks = ProgramWeekSerializer(many=True, read_only=True)  # nested
+```
+
+**Result:** One `GET /v1/programs/{id}/` returns:
+```json
+{
+  "title": "8-Week Strength",
+  "weeks": [
+    {
+      "week_number": 1,
+      "days": [
+        { "day_number": 1, "title": "Full Body", "workout_id": "..." },
+        { "day_number": 2, "title": "Rest", "is_rest_day": true }
+      ]
+    }
+  ]
+}
+```
+
+**Why not separate endpoints?** The mobile app needs the full program structure to render the program detail screen. Three separate requests (`/program`, `/program/weeks`, `/program/weeks/1/days`) would be slower and more complex. One request with nested data is simpler for the client.
+
+**Trade-off:** Nested responses can get large. For a program with 8 weeks × 7 days = 56 day objects — still reasonable. For truly large datasets, you'd paginate the nested items or use separate endpoints.
+
+---
+
+## 18. select_related vs prefetch_related (N+1 Query Prevention)
+
+**What:** Two Django ORM methods that pre-load related objects to avoid the "N+1 query problem."
+
+**Where:** Every view with related data
+
+### The N+1 problem
+```python
+# BAD: 1 query for workouts + 1 query per workout to get cover_image = N+1 queries
+for workout in Workout.objects.all():
+    print(workout.cover_image.title)  # each access hits the DB
+```
+
+### select_related (single FK, uses SQL JOIN)
+```python
+# GOOD: 1 query with JOIN — for ForeignKey / OneToOneField
+Exercise.objects.filter(...).select_related("demo_video", "demo_image")
+```
+Use when: the relationship is a single object (ForeignKey going "forward").
+
+### prefetch_related (reverse FK or M2M, uses separate query)
+```python
+# GOOD: 2 queries — one for workouts, one for all their exercise_entries
+Workout.objects.filter(...).prefetch_related("exercise_entries__exercise__demo_image")
+```
+Use when: the relationship is one-to-many (reverse FK) or many-to-many. Can chain with `__` to follow multiple levels.
+
+### How we use both together
+```python
+# Program detail: JOIN for cover_image, separate queries for weeks→days→workout
+Program.objects.filter(...)
+    .select_related("cover_image")
+    .prefetch_related("weeks__days__workout")
+```
+This executes 4 queries total (program+cover, weeks, days, workouts) regardless of how many weeks/days exist. Without it, a program with 8 weeks and 56 days would run 65+ queries.
+
+---
+
+## 19. Idempotent Endpoints (Safe to Retry)
+
+**What:** An endpoint that produces the same result whether you call it once or ten times.
+
+**Where:** `apps/programs/views.py` — `ProgramEnrollView`
+
+```python
+progress, created = ProgramProgress.objects.get_or_create(
+    user=request.user,
+    program=program,
+    tenant=request.tenant,
+    is_active=True,
+    defaults={"current_week": 1, "current_day": 1},
+)
+
+return Response(
+    ProgramProgressSerializer(progress).data,
+    status=status.HTTP_201_CREATED if created else status.HTTP_200_OK,
+)
+```
+
+**How `get_or_create` works:**
+1. Try to find an existing row matching the lookup fields
+2. If found → return it (no changes made)
+3. If not found → create it with the `defaults` values
+
+**Why this matters for mobile:** Network requests can fail mid-flight. The user taps "Enroll," the request succeeds on the server but the response is lost due to bad connectivity. The app retries — without idempotency, you'd get a duplicate enrollment or an error. With `get_or_create`, the retry harmlessly returns the existing enrollment.
+
+**Status code convention:** `201 Created` on first enrollment, `200 OK` on subsequent calls. The client knows whether it was new or existing.
+
+---
+
+## 20. bulk_create (Batch Database Inserts)
+
+**What:** Insert multiple rows in a single SQL statement instead of one INSERT per row.
+
+**Where:** `apps/workouts/views.py` — `WorkoutCompleteView`
+
+```python
+# Instead of this (N queries):
+for entry in exercise_logs:
+    ExerciseLog.objects.create(workout_log=log, exercise_id=entry["exercise_id"], ...)
+
+# We do this (1 query):
+exercise_logs = [ExerciseLog(...) for entry in data]
+ExerciseLog.objects.bulk_create(exercise_logs)
+```
+
+**Why:** A workout might have 8-10 exercises. That's 8-10 separate INSERT statements vs. one. At scale, this reduces database round-trips significantly. The difference is small for one user, but when hundreds of users complete workouts simultaneously, it adds up.
+
+**Limitation:** `bulk_create` doesn't call the model's `save()` method or trigger signals. If you have custom save logic, use individual creates instead.
+
+---
+
+## 21. Database Aggregation (aggregate and annotate)
+
+**What:** Push calculations to the database instead of loading all rows into Python.
+
+**Where:** `apps/progress/views.py` — `StatsView`
+
+```python
+total_workouts = logs.count()                              # SELECT COUNT(*)
+total_duration = logs.aggregate(
+    total=Sum("duration_seconds", default=0),              # SELECT SUM(duration_seconds)
+)["total"]
+```
+
+**Why not load all logs and sum in Python?**
+```python
+# BAD: loads every row into memory, then sums in Python
+all_logs = list(WorkoutLog.objects.filter(...))
+total = sum(log.duration_seconds or 0 for log in all_logs)
+
+# GOOD: database does the math, returns one number
+total = logs.aggregate(total=Sum("duration_seconds", default=0))["total"]
+```
+
+The database is optimized for this. If a user has 500 workout logs, the bad approach loads 500 rows into Python memory. The good approach asks PostgreSQL to add up one column and return a single integer.
+
+**`aggregate` vs `annotate`:**
+| Method | Returns | Use when |
+|---|---|---|
+| `aggregate()` | A dictionary `{"total": 12345}` | You want one summary value for the whole queryset |
+| `annotate()` | A queryset with extra computed fields on each row | You want a computed value per row (e.g., exercise count per workout) |
+
+---
+
+## 22. Streak Calculation (When SQL Isn't the Best Tool)
+
+**What:** Computing consecutive-day workout streaks in Python instead of SQL.
+
+**Where:** `apps/progress/views.py` — `StatsView._calculate_streaks`
+
+```python
+dates = sorted(logs.values_list("completed_at__date", flat=True).distinct())
+
+current = 1
+longest = 1
+for i in range(1, len(dates)):
+    if dates[i] - dates[i - 1] == timedelta(days=1):
+        current += 1
+        longest = max(longest, current)
+    else:
+        current = 1
+
+# Streak is broken if last workout wasn't today or yesterday
+if dates[-1] < today - timedelta(days=1):
+    current = 0
+```
+
+**Why Python over SQL:** Consecutive-day detection in SQL requires window functions (`LAG`, `PARTITION BY`, `ROW_NUMBER`) which are harder to read, debug, and test. The dataset is small (distinct dates — max 365 per year), so pulling them into Python is negligible overhead. The Python loop is immediately readable: "if the gap is one day, extend the streak; otherwise reset."
+
+**Key detail:** `values_list("completed_at__date", flat=True).distinct()` asks the database for just the unique dates (not full rows), which is efficient even with thousands of workout logs.
+
+**Rule of thumb:** Use SQL aggregation for math (SUM, COUNT, AVG). Use Python for sequential logic (streaks, state machines, complex conditionals).
+
+---
+
+## 23. get_object_or_404 (Clean Error Handling)
+
+**What:** A shortcut that returns a model instance or automatically raises a 404 response.
+
+**Where:** `apps/workouts/views.py`, `apps/programs/views.py`
+
+```python
+# Instead of:
+try:
+    workout = Workout.objects.get(pk=pk, tenant=request.tenant)
+except Workout.DoesNotExist:
+    return Response({"detail": "Not found."}, status=404)
+
+# Use:
+workout = get_object_or_404(Workout, pk=pk, tenant=request.tenant)
+```
+
+**Why:** Less boilerplate, consistent 404 responses. DRF catches the `Http404` exception and returns a proper JSON error response automatically. You'll see this in almost every Django view that looks up a specific object.
+
+---
+
 ## Concepts Log
 
 *New concepts will be added here as development continues.*
@@ -376,3 +667,12 @@ This keeps the docs accurate without maintaining a separate spec file.
 | 2026-02-18 | Admin scoping, inline editing | Every `admin.py` |
 | 2026-02-18 | Serializers, permissions, cursor pagination | `apps/users/`, `common/` |
 | 2026-02-18 | OpenAPI/Swagger docs | `config/urls.py`, `@extend_schema` decorators |
+| 2026-02-18 | Generic views (ListAPIView, RetrieveAPIView) | `apps/workouts/views.py`, `apps/content/views.py` |
+| 2026-02-18 | Lean list / rich detail pattern | Every app with list + detail serializers |
+| 2026-02-18 | Nested serializers (tree structures) | `apps/programs/serializers.py`, `apps/workouts/serializers.py` |
+| 2026-02-18 | select_related vs prefetch_related (N+1 prevention) | Every view with related data |
+| 2026-02-18 | Idempotent endpoints (get_or_create) | `apps/programs/views.py` |
+| 2026-02-18 | bulk_create (batch inserts) | `apps/workouts/views.py` |
+| 2026-02-18 | Database aggregation (aggregate, Sum) | `apps/progress/views.py` |
+| 2026-02-18 | Streak calculation (Python vs SQL trade-off) | `apps/progress/views.py` |
+| 2026-02-18 | get_object_or_404 | `apps/workouts/views.py`, `apps/programs/views.py` |
