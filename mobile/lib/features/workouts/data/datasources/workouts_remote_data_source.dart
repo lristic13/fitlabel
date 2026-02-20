@@ -6,8 +6,16 @@ class WorkoutsRemoteDataSource {
 
   WorkoutsRemoteDataSource({required ApiClient client}) : _client = client;
 
-  Future<Map<String, dynamic>> getWorkoutDetail(String id) {
-    return _client.get(ApiConfig.workoutDetail(id));
+  Future<List<dynamic>> getWorkouts() {
+    return _client.getList(ApiConfig.workouts);
+  }
+
+  Future<Map<String, dynamic>> getWorkoutDetail(String id,
+      {String? programDayId}) {
+    final queryParams = <String, dynamic>{};
+    if (programDayId != null) queryParams['program_day_id'] = programDayId;
+    return _client.get(ApiConfig.workoutDetail(id),
+        queryParameters: queryParams.isNotEmpty ? queryParams : null);
   }
 
   Future<Map<String, dynamic>> startWorkout(

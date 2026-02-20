@@ -43,7 +43,25 @@ final workoutsRepositoryProvider = Provider<WorkoutsRepository>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef WorkoutsRepositoryRef = ProviderRef<WorkoutsRepository>;
-String _$workoutDetailHash() => r'95bb001c2fd3eceaaa55ca31a447e5b265207598';
+String _$workoutsListHash() => r'c68ef5764e66ca9c3c27d734d1e4a5a581d52e8c';
+
+/// See also [workoutsList].
+@ProviderFor(workoutsList)
+final workoutsListProvider =
+    AutoDisposeFutureProvider<List<WorkoutBrief>>.internal(
+      workoutsList,
+      name: r'workoutsListProvider',
+      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+          ? null
+          : _$workoutsListHash,
+      dependencies: null,
+      allTransitiveDependencies: null,
+    );
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef WorkoutsListRef = AutoDisposeFutureProviderRef<List<WorkoutBrief>>;
+String _$workoutDetailHash() => r'1d9d50067e2d8dfec9beef3a49af6cfbea058fb2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -76,15 +94,15 @@ class WorkoutDetailFamily extends Family<AsyncValue<WorkoutDetail>> {
   const WorkoutDetailFamily();
 
   /// See also [workoutDetail].
-  WorkoutDetailProvider call(String id) {
-    return WorkoutDetailProvider(id);
+  WorkoutDetailProvider call((String, String?) args) {
+    return WorkoutDetailProvider(args);
   }
 
   @override
   WorkoutDetailProvider getProviderOverride(
     covariant WorkoutDetailProvider provider,
   ) {
-    return call(provider.id);
+    return call(provider.args);
   }
 
   static const Iterable<ProviderOrFamily>? _dependencies = null;
@@ -105,9 +123,9 @@ class WorkoutDetailFamily extends Family<AsyncValue<WorkoutDetail>> {
 /// See also [workoutDetail].
 class WorkoutDetailProvider extends AutoDisposeFutureProvider<WorkoutDetail> {
   /// See also [workoutDetail].
-  WorkoutDetailProvider(String id)
+  WorkoutDetailProvider((String, String?) args)
     : this._internal(
-        (ref) => workoutDetail(ref as WorkoutDetailRef, id),
+        (ref) => workoutDetail(ref as WorkoutDetailRef, args),
         from: workoutDetailProvider,
         name: r'workoutDetailProvider',
         debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -116,7 +134,7 @@ class WorkoutDetailProvider extends AutoDisposeFutureProvider<WorkoutDetail> {
         dependencies: WorkoutDetailFamily._dependencies,
         allTransitiveDependencies:
             WorkoutDetailFamily._allTransitiveDependencies,
-        id: id,
+        args: args,
       );
 
   WorkoutDetailProvider._internal(
@@ -126,10 +144,10 @@ class WorkoutDetailProvider extends AutoDisposeFutureProvider<WorkoutDetail> {
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.id,
+    required this.args,
   }) : super.internal();
 
-  final String id;
+  final (String, String?) args;
 
   @override
   Override overrideWith(
@@ -144,7 +162,7 @@ class WorkoutDetailProvider extends AutoDisposeFutureProvider<WorkoutDetail> {
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        id: id,
+        args: args,
       ),
     );
   }
@@ -156,13 +174,13 @@ class WorkoutDetailProvider extends AutoDisposeFutureProvider<WorkoutDetail> {
 
   @override
   bool operator ==(Object other) {
-    return other is WorkoutDetailProvider && other.id == id;
+    return other is WorkoutDetailProvider && other.args == args;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, args.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -171,8 +189,8 @@ class WorkoutDetailProvider extends AutoDisposeFutureProvider<WorkoutDetail> {
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 mixin WorkoutDetailRef on AutoDisposeFutureProviderRef<WorkoutDetail> {
-  /// The parameter `id` of this provider.
-  String get id;
+  /// The parameter `args` of this provider.
+  (String, String?) get args;
 }
 
 class _WorkoutDetailProviderElement
@@ -181,7 +199,7 @@ class _WorkoutDetailProviderElement
   _WorkoutDetailProviderElement(super.provider);
 
   @override
-  String get id => (origin as WorkoutDetailProvider).id;
+  (String, String?) get args => (origin as WorkoutDetailProvider).args;
 }
 
 // ignore_for_file: type=lint

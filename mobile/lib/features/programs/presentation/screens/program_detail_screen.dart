@@ -28,10 +28,12 @@ class ProgramDetailScreen extends ConsumerWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Failed to load program', style: Theme.of(context).textTheme.titleMedium),
+              Text('Failed to load program',
+                  style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               FilledButton.tonal(
-                onPressed: () => ref.invalidate(programDetailProvider(programId)),
+                onPressed: () =>
+                    ref.invalidate(programDetailProvider(programId)),
                 child: const Text('Retry'),
               ),
             ],
@@ -39,9 +41,17 @@ class ProgramDetailScreen extends ConsumerWidget {
         ),
         data: (program) => ProgramDetailBody(
           program: program,
-          onDayTap: (day) {
+          onDayTap: (day) async {
             if (day.workoutId != null) {
-              context.push('/workouts/${day.workoutId}');
+              final completed = await context.push<bool>(
+                Uri(
+                  path: '/workouts/${day.workoutId}',
+                  queryParameters: {'programDayId': '${day.id}'},
+                ).toString(),
+              );
+              if (completed == true) {
+                ref.invalidate(programDetailProvider(programId));
+              }
             }
           },
         ),
@@ -70,7 +80,11 @@ class ProgramDetailBody extends StatelessWidget {
         ...program.weeks.map(
           (week) => Padding(
             padding: const EdgeInsets.only(bottom: 12),
-            child: ProgramWeekCard(week: week, onDayTap: onDayTap),
+            child: ProgramWeekCard(
+              week: week,
+              completedDayIds: program.completedDayIds.toSet(),
+              onDayTap: onDayTap,
+            ),
           ),
         ),
       ],

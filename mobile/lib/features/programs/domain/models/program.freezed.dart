@@ -339,6 +339,7 @@ mixin _$ProgramDetail {
   bool get isFree => throw _privateConstructorUsedError;
   MediaFile? get coverImage => throw _privateConstructorUsedError;
   List<ProgramWeek> get weeks => throw _privateConstructorUsedError;
+  List<int> get completedDayIds => throw _privateConstructorUsedError;
 
   /// Serializes this ProgramDetail to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -366,6 +367,7 @@ abstract class $ProgramDetailCopyWith<$Res> {
     bool isFree,
     MediaFile? coverImage,
     List<ProgramWeek> weeks,
+    List<int> completedDayIds,
   });
 
   $MediaFileCopyWith<$Res>? get coverImage;
@@ -394,6 +396,7 @@ class _$ProgramDetailCopyWithImpl<$Res, $Val extends ProgramDetail>
     Object? isFree = null,
     Object? coverImage = freezed,
     Object? weeks = null,
+    Object? completedDayIds = null,
   }) {
     return _then(
       _value.copyWith(
@@ -429,6 +432,10 @@ class _$ProgramDetailCopyWithImpl<$Res, $Val extends ProgramDetail>
                 ? _value.weeks
                 : weeks // ignore: cast_nullable_to_non_nullable
                       as List<ProgramWeek>,
+            completedDayIds: null == completedDayIds
+                ? _value.completedDayIds
+                : completedDayIds // ignore: cast_nullable_to_non_nullable
+                      as List<int>,
           )
           as $Val,
     );
@@ -467,6 +474,7 @@ abstract class _$$ProgramDetailImplCopyWith<$Res>
     bool isFree,
     MediaFile? coverImage,
     List<ProgramWeek> weeks,
+    List<int> completedDayIds,
   });
 
   @override
@@ -495,6 +503,7 @@ class __$$ProgramDetailImplCopyWithImpl<$Res>
     Object? isFree = null,
     Object? coverImage = freezed,
     Object? weeks = null,
+    Object? completedDayIds = null,
   }) {
     return _then(
       _$ProgramDetailImpl(
@@ -530,6 +539,10 @@ class __$$ProgramDetailImplCopyWithImpl<$Res>
             ? _value._weeks
             : weeks // ignore: cast_nullable_to_non_nullable
                   as List<ProgramWeek>,
+        completedDayIds: null == completedDayIds
+            ? _value._completedDayIds
+            : completedDayIds // ignore: cast_nullable_to_non_nullable
+                  as List<int>,
       ),
     );
   }
@@ -547,7 +560,9 @@ class _$ProgramDetailImpl implements _ProgramDetail {
     required this.isFree,
     this.coverImage,
     required final List<ProgramWeek> weeks,
-  }) : _weeks = weeks;
+    final List<int> completedDayIds = const [],
+  }) : _weeks = weeks,
+       _completedDayIds = completedDayIds;
 
   factory _$ProgramDetailImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProgramDetailImplFromJson(json);
@@ -574,9 +589,18 @@ class _$ProgramDetailImpl implements _ProgramDetail {
     return EqualUnmodifiableListView(_weeks);
   }
 
+  final List<int> _completedDayIds;
+  @override
+  @JsonKey()
+  List<int> get completedDayIds {
+    if (_completedDayIds is EqualUnmodifiableListView) return _completedDayIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_completedDayIds);
+  }
+
   @override
   String toString() {
-    return 'ProgramDetail(id: $id, title: $title, description: $description, difficulty: $difficulty, durationWeeks: $durationWeeks, isFree: $isFree, coverImage: $coverImage, weeks: $weeks)';
+    return 'ProgramDetail(id: $id, title: $title, description: $description, difficulty: $difficulty, durationWeeks: $durationWeeks, isFree: $isFree, coverImage: $coverImage, weeks: $weeks, completedDayIds: $completedDayIds)';
   }
 
   @override
@@ -595,7 +619,11 @@ class _$ProgramDetailImpl implements _ProgramDetail {
             (identical(other.isFree, isFree) || other.isFree == isFree) &&
             (identical(other.coverImage, coverImage) ||
                 other.coverImage == coverImage) &&
-            const DeepCollectionEquality().equals(other._weeks, _weeks));
+            const DeepCollectionEquality().equals(other._weeks, _weeks) &&
+            const DeepCollectionEquality().equals(
+              other._completedDayIds,
+              _completedDayIds,
+            ));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -610,6 +638,7 @@ class _$ProgramDetailImpl implements _ProgramDetail {
     isFree,
     coverImage,
     const DeepCollectionEquality().hash(_weeks),
+    const DeepCollectionEquality().hash(_completedDayIds),
   );
 
   /// Create a copy of ProgramDetail
@@ -636,6 +665,7 @@ abstract class _ProgramDetail implements ProgramDetail {
     required final bool isFree,
     final MediaFile? coverImage,
     required final List<ProgramWeek> weeks,
+    final List<int> completedDayIds,
   }) = _$ProgramDetailImpl;
 
   factory _ProgramDetail.fromJson(Map<String, dynamic> json) =
@@ -657,6 +687,8 @@ abstract class _ProgramDetail implements ProgramDetail {
   MediaFile? get coverImage;
   @override
   List<ProgramWeek> get weeks;
+  @override
+  List<int> get completedDayIds;
 
   /// Create a copy of ProgramDetail
   /// with the given fields replaced by the non-null parameter values.

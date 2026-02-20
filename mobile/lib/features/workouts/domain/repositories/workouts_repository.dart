@@ -1,7 +1,8 @@
 import 'package:fitlabel/features/workouts/domain/models/workout.dart';
 
 abstract class WorkoutsRepository {
-  Future<WorkoutDetail> getWorkoutDetail(String id);
+  Future<List<WorkoutBrief>> getWorkouts();
+  Future<WorkoutDetail> getWorkoutDetail(String id, {String? programDayId});
   Future<WorkoutLog> startWorkout(String workoutId, {String? programDayId});
   Future<WorkoutLog> completeWorkout({
     required String workoutId,

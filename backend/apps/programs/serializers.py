@@ -1,7 +1,7 @@
 from django.utils import timezone
 from rest_framework import serializers
 
-from apps.progress.models import ProgramProgress
+from apps.progress.models import ProgramProgress, WorkoutLog
 from apps.workouts.serializers import MediaFileBriefSerializer
 
 from .models import Program, ProgramDay, ProgramWeek
@@ -55,6 +55,7 @@ class ProgramWeekSerializer(serializers.ModelSerializer):
 class ProgramDetailSerializer(serializers.ModelSerializer):
     cover_image = MediaFileBriefSerializer(read_only=True)
     weeks = ProgramWeekSerializer(many=True, read_only=True)
+    completed_day_ids = serializers.SerializerMethodField()
 
     class Meta:
         model = Program
@@ -67,7 +68,22 @@ class ProgramDetailSerializer(serializers.ModelSerializer):
             "is_free",
             "cover_image",
             "weeks",
+            "completed_day_ids",
         ]
+
+    def get_completed_day_ids(self, obj):
+        request = self.context.get("request")
+        if not request or not request.user.is_authenticated:
+            return []
+        return list(
+            WorkoutLog.objects.filter(
+                user=request.user,
+                program_day__week__program=obj,
+                completed_at__isnull=False,
+            )
+            .values_list("program_day_id", flat=True)
+            .distinct()
+        )
 
 
 class ProgramProgressSerializer(serializers.ModelSerializer):

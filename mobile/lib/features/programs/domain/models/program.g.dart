@@ -44,6 +44,11 @@ _$ProgramDetailImpl _$$ProgramDetailImplFromJson(Map<String, dynamic> json) =>
       weeks: (json['weeks'] as List<dynamic>)
           .map((e) => ProgramWeek.fromJson(e as Map<String, dynamic>))
           .toList(),
+      completedDayIds:
+          (json['completed_day_ids'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$ProgramDetailImplToJson(_$ProgramDetailImpl instance) =>
@@ -56,6 +61,7 @@ Map<String, dynamic> _$$ProgramDetailImplToJson(_$ProgramDetailImpl instance) =>
       'is_free': instance.isFree,
       'cover_image': instance.coverImage,
       'weeks': instance.weeks,
+      'completed_day_ids': instance.completedDayIds,
     };
 
 _$ProgramWeekImpl _$$ProgramWeekImplFromJson(Map<String, dynamic> json) =>

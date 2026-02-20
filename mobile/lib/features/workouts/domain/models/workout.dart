@@ -5,6 +5,21 @@ import 'package:fitlabel/shared/models/media_file.dart';
 part 'workout.freezed.dart';
 part 'workout.g.dart';
 
+/// Lean model for workout browse lists.
+@freezed
+class WorkoutBrief with _$WorkoutBrief {
+  const factory WorkoutBrief({
+    required String id,
+    required String title,
+    int? estimatedDurationMinutes,
+    MediaFile? coverImage,
+    required int exerciseCount,
+  }) = _WorkoutBrief;
+
+  factory WorkoutBrief.fromJson(Map<String, dynamic> json) =>
+      _$WorkoutBriefFromJson(json);
+}
+
 @freezed
 class WorkoutDetail with _$WorkoutDetail {
   const factory WorkoutDetail({
@@ -14,6 +29,7 @@ class WorkoutDetail with _$WorkoutDetail {
     int? estimatedDurationMinutes,
     MediaFile? coverImage,
     required List<ExerciseEntry> exerciseEntries,
+    WorkoutLog? latestLog,
   }) = _WorkoutDetail;
 
   factory WorkoutDetail.fromJson(Map<String, dynamic> json) =>
@@ -58,8 +74,29 @@ class WorkoutLog with _$WorkoutLog {
     required DateTime startedAt,
     DateTime? completedAt,
     int? durationSeconds,
+    @Default([]) List<ExerciseLogEntry> exerciseLogs,
   }) = _WorkoutLog;
 
   factory WorkoutLog.fromJson(Map<String, dynamic> json) =>
       _$WorkoutLogFromJson(json);
+}
+
+@freezed
+class ExerciseLogEntry with _$ExerciseLogEntry {
+  const factory ExerciseLogEntry({
+    required String exercise,
+    required int setsCompleted,
+    @Default([]) List<int> repsPerSet,
+    // ignore: invalid_annotation_target
+    @Default([]) @JsonKey(fromJson: _weightListFromJson) List<double> weightPerSet,
+    required String weightUnit,
+  }) = _ExerciseLogEntry;
+
+  factory ExerciseLogEntry.fromJson(Map<String, dynamic> json) =>
+      _$ExerciseLogEntryFromJson(json);
+}
+
+List<double> _weightListFromJson(dynamic json) {
+  if (json == null) return [];
+  return (json as List).map((e) => (e as num).toDouble()).toList();
 }

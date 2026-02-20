@@ -71,6 +71,7 @@ GoRouter router(Ref ref) {
                 parentNavigatorKey: _rootNavigatorKey,
                 builder: (context, state) => WorkoutDetailScreen(
                   workoutId: state.pathParameters['id']!,
+                  programDayId: state.uri.queryParameters['programDayId'],
                 ),
               ),
             ],

@@ -21,6 +21,7 @@ class ApiConfig {
   static String programProgress(String id) => '/v1/programs/$id/progress/';
 
   // Workouts
+  static const String workouts = '/v1/workouts/';
   static String workoutDetail(String id) => '/v1/workouts/$id/';
   static String workoutStart(String id) => '/v1/workouts/$id/start/';
   static String workoutComplete(String id) => '/v1/workouts/$id/complete/';

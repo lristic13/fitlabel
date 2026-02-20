@@ -1,18 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-import 'package:fitlabel/features/workouts/presentation/providers/workouts_provider.dart';
-import 'package:fitlabel/features/workouts/presentation/widgets/exercise_card.dart';
 import 'package:fitlabel/features/workouts/domain/models/workout.dart';
+import 'package:fitlabel/features/workouts/domain/models/workout_session.dart';
+import 'package:fitlabel/features/workouts/presentation/providers/workouts_provider.dart';
+import 'package:fitlabel/features/workouts/presentation/providers/workout_session_provider.dart';
+import 'package:fitlabel/features/workouts/presentation/widgets/exercise_card.dart';
+import 'package:fitlabel/features/workouts/presentation/widgets/workout_action_bar.dart';
 
-class WorkoutDetailScreen extends ConsumerWidget {
+class WorkoutDetailScreen extends ConsumerStatefulWidget {
   final String workoutId;
+  final String? programDayId;
 
-  const WorkoutDetailScreen({super.key, required this.workoutId});
+  const WorkoutDetailScreen({
+    super.key,
+    required this.workoutId,
+    this.programDayId,
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final detailState = ref.watch(workoutDetailProvider(workoutId));
+  ConsumerState<WorkoutDetailScreen> createState() =>
+      _WorkoutDetailScreenState();
+}
+
+class _WorkoutDetailScreenState extends ConsumerState<WorkoutDetailScreen> {
+  bool _logLoaded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final workoutId = widget.workoutId;
+    final programDayId = widget.programDayId;
+    final detailState =
+        ref.watch(workoutDetailProvider((workoutId, programDayId)));
+    final sessionState =
+        ref.watch(workoutSessionNotifierProvider(workoutId));
+
+    // Auto-populate session from previously completed log
+    if (!_logLoaded && sessionState.valueOrNull == null) {
+      final detail = detailState.valueOrNull;
+      if (detail != null &&
+          detail.latestLog != null &&
+          detail.latestLog!.completedAt != null) {
+        _logLoaded = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            ref
+                .read(workoutSessionNotifierProvider(workoutId).notifier)
+                .loadFromLog(detail.latestLog!, detail.exerciseEntries);
+          }
+        });
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -30,26 +69,107 @@ class WorkoutDetailScreen extends ConsumerWidget {
                   style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 8),
               FilledButton.tonal(
-                onPressed: () =>
-                    ref.invalidate(workoutDetailProvider(workoutId)),
+                onPressed: () => ref
+                    .invalidate(workoutDetailProvider((workoutId, programDayId))),
                 child: const Text('Retry'),
               ),
             ],
           ),
         ),
-        data: (workout) => WorkoutDetailBody(workout: workout),
+        data: (workout) => WorkoutDetailBody(
+          workout: workout,
+          session: sessionState.valueOrNull,
+          workoutId: workoutId,
+        ),
       ),
+      bottomNavigationBar: detailState.hasValue
+          ? WorkoutBottomBar(
+              workoutId: workoutId,
+              programDayId: programDayId,
+              sessionState: sessionState,
+              exerciseEntries: detailState.valueOrNull?.exerciseEntries,
+              latestLog: detailState.valueOrNull?.latestLog,
+            )
+          : null,
     );
   }
 }
 
-class WorkoutDetailBody extends StatelessWidget {
-  final WorkoutDetail workout;
+class WorkoutBottomBar extends ConsumerWidget {
+  final String workoutId;
+  final String? programDayId;
+  final AsyncValue<WorkoutSession?> sessionState;
+  final List<ExerciseEntry>? exerciseEntries;
+  final WorkoutLog? latestLog;
 
-  const WorkoutDetailBody({super.key, required this.workout});
+  const WorkoutBottomBar({
+    super.key,
+    required this.workoutId,
+    this.programDayId,
+    required this.sessionState,
+    required this.exerciseEntries,
+    this.latestLog,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = sessionState is AsyncLoading;
+    final session = sessionState.valueOrNull;
+
+    // Active session completed
+    if (session != null && session.workoutLog.completedAt != null) {
+      return WorkoutCompletedBar(
+        durationSeconds: session.workoutLog.durationSeconds,
+        onDone: () => context.pop(true),
+      );
+    }
+
+    // Active session in progress — show progress
+    if (session != null) {
+      return WorkoutActiveBar(
+        session: session,
+        onFinishEarly: () => ref
+            .read(workoutSessionNotifierProvider(workoutId).notifier)
+            .finishEarly(),
+      );
+    }
+
+    // Previously completed (from backend) — show completed state
+    if (latestLog != null && latestLog!.completedAt != null) {
+      return WorkoutCompletedBar(
+        durationSeconds: latestLog!.durationSeconds,
+        onDone: () => context.pop(true),
+      );
+    }
+
+    // No session — show start button
+    return WorkoutStartBar(
+      isLoading: isLoading,
+      onStart: () {
+        if (exerciseEntries != null) {
+          ref
+              .read(workoutSessionNotifierProvider(workoutId).notifier)
+              .start(exerciseEntries!, programDayId: programDayId);
+        }
+      },
+    );
+  }
+}
+
+class WorkoutDetailBody extends ConsumerWidget {
+  final WorkoutDetail workout;
+  final WorkoutSession? session;
+  final String workoutId;
+
+  const WorkoutDetailBody({
+    super.key,
+    required this.workout,
+    required this.session,
+    required this.workoutId,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
     return ListView(
@@ -66,14 +186,43 @@ class WorkoutDetailBody extends StatelessWidget {
         const SizedBox(height: 8),
         ...List.generate(
           workout.exerciseEntries.length,
-          (index) => Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: ExerciseCard(
-              entry: workout.exerciseEntries[index],
-              index: index,
-            ),
-          ),
+          (index) {
+            final entry = workout.exerciseEntries[index];
+            final exerciseLog = session?.exerciseLogs[entry.exercise.id];
+
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: ExerciseCard(
+                entry: entry,
+                index: index,
+                sessionLog: exerciseLog,
+                onSetComplete: exerciseLog != null
+                    ? (setIndex, reps, weight) {
+                        ref
+                            .read(workoutSessionNotifierProvider(workoutId)
+                                .notifier)
+                            .updateSet(
+                                entry.exercise.id, setIndex, reps, weight);
+                        ref
+                            .read(workoutSessionNotifierProvider(workoutId)
+                                .notifier)
+                            .toggleSet(entry.exercise.id, setIndex);
+                      }
+                    : null,
+                onSetUncomplete: exerciseLog != null
+                    ? (setIndex) {
+                        ref
+                            .read(workoutSessionNotifierProvider(workoutId)
+                                .notifier)
+                            .toggleSet(entry.exercise.id, setIndex);
+                      }
+                    : null,
+              ),
+            );
+          },
         ),
+        // Extra padding at bottom so content isn't hidden by bottom bar
+        const SizedBox(height: 80),
       ],
     );
   }

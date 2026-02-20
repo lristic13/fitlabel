@@ -1,62 +1,165 @@
 import 'package:flutter/material.dart';
 
 import 'package:fitlabel/features/workouts/domain/models/workout.dart';
+import 'package:fitlabel/features/workouts/domain/models/workout_session.dart';
+import 'package:fitlabel/features/workouts/presentation/widgets/exercise_set_row.dart';
 
 class ExerciseCard extends StatelessWidget {
   final ExerciseEntry entry;
   final int index;
+  final ExerciseSessionLog? sessionLog;
+  final void Function(int setIndex, int reps, double weight)? onSetComplete;
+  final void Function(int setIndex)? onSetUncomplete;
 
   const ExerciseCard({
     super.key,
     required this.entry,
     required this.index,
+    this.sessionLog,
+    this.onSetComplete,
+    this.onSetUncomplete,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final exercise = entry.exercise;
+    final isExerciseComplete = sessionLog?.isComplete ?? false;
 
     return Card(
+      color: isExerciseComplete
+          ? theme.colorScheme.tertiaryContainer.withValues(alpha: 0.3)
+          : null,
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ExerciseCardThumbnail(demoImage: exercise.demoImage),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ExerciseCardTitle(
-                    name: exercise.name,
-                    supersetGroup: entry.supersetGroup,
-                  ),
-                  const SizedBox(height: 4),
-                  ExerciseCardSetsReps(entry: entry),
-                  if (exercise.muscleGroups.isNotEmpty) ...[
-                    const SizedBox(height: 6),
-                    ExerciseCardMuscleGroups(
-                      muscleGroups: exercise.muscleGroups,
-                    ),
-                  ],
-                  if (entry.notes != null && entry.notes!.isNotEmpty) ...[
-                    const SizedBox(height: 6),
-                    Text(
-                      entry.notes!,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontStyle: FontStyle.italic,
-                        color: theme.colorScheme.onSurfaceVariant,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ExerciseCardThumbnail(demoImage: exercise.demoImage),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ExerciseCardTitle(
+                        name: exercise.name,
+                        supersetGroup: entry.supersetGroup,
+                        isComplete: isExerciseComplete,
                       ),
-                    ),
-                  ],
-                ],
+                      const SizedBox(height: 4),
+                      ExerciseCardSetsReps(entry: entry),
+                      if (exercise.muscleGroups.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        ExerciseCardMuscleGroups(
+                          muscleGroups: exercise.muscleGroups,
+                        ),
+                      ],
+                      if (entry.notes != null &&
+                          entry.notes!.isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          entry.notes!,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontStyle: FontStyle.italic,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                if (isExerciseComplete)
+                  Icon(Icons.check_circle,
+                      color: theme.colorScheme.tertiary, size: 24),
+              ],
+            ),
+            // Set logging rows when session is active
+            if (sessionLog != null) ...[
+              const Divider(height: 16),
+              ExerciseSetLogging(
+                entry: entry,
+                sessionLog: sessionLog!,
+                onSetComplete: onSetComplete!,
+                onSetUncomplete: onSetUncomplete!,
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ExerciseSetLogging extends StatelessWidget {
+  final ExerciseEntry entry;
+  final ExerciseSessionLog sessionLog;
+  final void Function(int setIndex, int reps, double weight) onSetComplete;
+  final void Function(int setIndex) onSetUncomplete;
+
+  const ExerciseSetLogging({
+    super.key,
+    required this.entry,
+    required this.sessionLog,
+    required this.onSetComplete,
+    required this.onSetUncomplete,
+  });
+
+  int _parseTargetReps(String reps) {
+    final parsed = int.tryParse(reps);
+    if (parsed != null) return parsed;
+    if (reps.contains('-')) {
+      final upper = int.tryParse(reps.split('-').last.trim());
+      if (upper != null) return upper;
+    }
+    return 0;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final targetReps = _parseTargetReps(entry.reps);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              '${sessionLog.completedSetsCount}/${sessionLog.targetSets} sets',
+              style: theme.textTheme.labelMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: sessionLog.isComplete
+                    ? theme.colorScheme.tertiary
+                    : theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: LinearProgressIndicator(
+                value: sessionLog.targetSets > 0
+                    ? sessionLog.completedSetsCount / sessionLog.targetSets
+                    : 0,
+                backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                color: theme.colorScheme.tertiary,
               ),
             ),
           ],
         ),
-      ),
+        const SizedBox(height: 8),
+        ...List.generate(
+          sessionLog.sets.length,
+          (i) => ExerciseSetRow(
+            setIndex: i,
+            setLog: sessionLog.sets[i],
+            targetReps: targetReps,
+            onComplete: (reps, weight) => onSetComplete(i, reps, weight),
+            onUncomplete: () => onSetUncomplete(i),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -76,7 +179,8 @@ class ExerciseCardThumbnail extends StatelessWidget {
           width: 64,
           height: 64,
           fit: BoxFit.cover,
-          errorBuilder: (_, _, _) => ExerciseCardThumbnailPlaceholder(),
+          errorBuilder: (_, _, _) =>
+              const ExerciseCardThumbnailPlaceholder(),
         ),
       );
     }
@@ -108,11 +212,13 @@ class ExerciseCardThumbnailPlaceholder extends StatelessWidget {
 class ExerciseCardTitle extends StatelessWidget {
   final String name;
   final int? supersetGroup;
+  final bool isComplete;
 
   const ExerciseCardTitle({
     super.key,
     required this.name,
     this.supersetGroup,
+    this.isComplete = false,
   });
 
   @override
@@ -143,6 +249,7 @@ class ExerciseCardTitle extends StatelessWidget {
             name,
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.bold,
+              color: isComplete ? theme.colorScheme.tertiary : null,
             ),
           ),
         ),

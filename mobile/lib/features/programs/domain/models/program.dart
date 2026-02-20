@@ -34,6 +34,7 @@ class ProgramDetail with _$ProgramDetail {
     required bool isFree,
     MediaFile? coverImage,
     required List<ProgramWeek> weeks,
+    @Default([]) List<int> completedDayIds,
   }) = _ProgramDetail;
 
   factory ProgramDetail.fromJson(Map<String, dynamic> json) =>

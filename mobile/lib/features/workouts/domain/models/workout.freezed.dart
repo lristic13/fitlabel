@@ -15,6 +15,281 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
+WorkoutBrief _$WorkoutBriefFromJson(Map<String, dynamic> json) {
+  return _WorkoutBrief.fromJson(json);
+}
+
+/// @nodoc
+mixin _$WorkoutBrief {
+  String get id => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
+  int? get estimatedDurationMinutes => throw _privateConstructorUsedError;
+  MediaFile? get coverImage => throw _privateConstructorUsedError;
+  int get exerciseCount => throw _privateConstructorUsedError;
+
+  /// Serializes this WorkoutBrief to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of WorkoutBrief
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $WorkoutBriefCopyWith<WorkoutBrief> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $WorkoutBriefCopyWith<$Res> {
+  factory $WorkoutBriefCopyWith(
+    WorkoutBrief value,
+    $Res Function(WorkoutBrief) then,
+  ) = _$WorkoutBriefCopyWithImpl<$Res, WorkoutBrief>;
+  @useResult
+  $Res call({
+    String id,
+    String title,
+    int? estimatedDurationMinutes,
+    MediaFile? coverImage,
+    int exerciseCount,
+  });
+
+  $MediaFileCopyWith<$Res>? get coverImage;
+}
+
+/// @nodoc
+class _$WorkoutBriefCopyWithImpl<$Res, $Val extends WorkoutBrief>
+    implements $WorkoutBriefCopyWith<$Res> {
+  _$WorkoutBriefCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of WorkoutBrief
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? title = null,
+    Object? estimatedDurationMinutes = freezed,
+    Object? coverImage = freezed,
+    Object? exerciseCount = null,
+  }) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            estimatedDurationMinutes: freezed == estimatedDurationMinutes
+                ? _value.estimatedDurationMinutes
+                : estimatedDurationMinutes // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            coverImage: freezed == coverImage
+                ? _value.coverImage
+                : coverImage // ignore: cast_nullable_to_non_nullable
+                      as MediaFile?,
+            exerciseCount: null == exerciseCount
+                ? _value.exerciseCount
+                : exerciseCount // ignore: cast_nullable_to_non_nullable
+                      as int,
+          )
+          as $Val,
+    );
+  }
+
+  /// Create a copy of WorkoutBrief
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MediaFileCopyWith<$Res>? get coverImage {
+    if (_value.coverImage == null) {
+      return null;
+    }
+
+    return $MediaFileCopyWith<$Res>(_value.coverImage!, (value) {
+      return _then(_value.copyWith(coverImage: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$WorkoutBriefImplCopyWith<$Res>
+    implements $WorkoutBriefCopyWith<$Res> {
+  factory _$$WorkoutBriefImplCopyWith(
+    _$WorkoutBriefImpl value,
+    $Res Function(_$WorkoutBriefImpl) then,
+  ) = __$$WorkoutBriefImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String id,
+    String title,
+    int? estimatedDurationMinutes,
+    MediaFile? coverImage,
+    int exerciseCount,
+  });
+
+  @override
+  $MediaFileCopyWith<$Res>? get coverImage;
+}
+
+/// @nodoc
+class __$$WorkoutBriefImplCopyWithImpl<$Res>
+    extends _$WorkoutBriefCopyWithImpl<$Res, _$WorkoutBriefImpl>
+    implements _$$WorkoutBriefImplCopyWith<$Res> {
+  __$$WorkoutBriefImplCopyWithImpl(
+    _$WorkoutBriefImpl _value,
+    $Res Function(_$WorkoutBriefImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of WorkoutBrief
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? title = null,
+    Object? estimatedDurationMinutes = freezed,
+    Object? coverImage = freezed,
+    Object? exerciseCount = null,
+  }) {
+    return _then(
+      _$WorkoutBriefImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        estimatedDurationMinutes: freezed == estimatedDurationMinutes
+            ? _value.estimatedDurationMinutes
+            : estimatedDurationMinutes // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        coverImage: freezed == coverImage
+            ? _value.coverImage
+            : coverImage // ignore: cast_nullable_to_non_nullable
+                  as MediaFile?,
+        exerciseCount: null == exerciseCount
+            ? _value.exerciseCount
+            : exerciseCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$WorkoutBriefImpl implements _WorkoutBrief {
+  const _$WorkoutBriefImpl({
+    required this.id,
+    required this.title,
+    this.estimatedDurationMinutes,
+    this.coverImage,
+    required this.exerciseCount,
+  });
+
+  factory _$WorkoutBriefImpl.fromJson(Map<String, dynamic> json) =>
+      _$$WorkoutBriefImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String title;
+  @override
+  final int? estimatedDurationMinutes;
+  @override
+  final MediaFile? coverImage;
+  @override
+  final int exerciseCount;
+
+  @override
+  String toString() {
+    return 'WorkoutBrief(id: $id, title: $title, estimatedDurationMinutes: $estimatedDurationMinutes, coverImage: $coverImage, exerciseCount: $exerciseCount)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$WorkoutBriefImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(
+                  other.estimatedDurationMinutes,
+                  estimatedDurationMinutes,
+                ) ||
+                other.estimatedDurationMinutes == estimatedDurationMinutes) &&
+            (identical(other.coverImage, coverImage) ||
+                other.coverImage == coverImage) &&
+            (identical(other.exerciseCount, exerciseCount) ||
+                other.exerciseCount == exerciseCount));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    title,
+    estimatedDurationMinutes,
+    coverImage,
+    exerciseCount,
+  );
+
+  /// Create a copy of WorkoutBrief
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$WorkoutBriefImplCopyWith<_$WorkoutBriefImpl> get copyWith =>
+      __$$WorkoutBriefImplCopyWithImpl<_$WorkoutBriefImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$WorkoutBriefImplToJson(this);
+  }
+}
+
+abstract class _WorkoutBrief implements WorkoutBrief {
+  const factory _WorkoutBrief({
+    required final String id,
+    required final String title,
+    final int? estimatedDurationMinutes,
+    final MediaFile? coverImage,
+    required final int exerciseCount,
+  }) = _$WorkoutBriefImpl;
+
+  factory _WorkoutBrief.fromJson(Map<String, dynamic> json) =
+      _$WorkoutBriefImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get title;
+  @override
+  int? get estimatedDurationMinutes;
+  @override
+  MediaFile? get coverImage;
+  @override
+  int get exerciseCount;
+
+  /// Create a copy of WorkoutBrief
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$WorkoutBriefImplCopyWith<_$WorkoutBriefImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 WorkoutDetail _$WorkoutDetailFromJson(Map<String, dynamic> json) {
   return _WorkoutDetail.fromJson(json);
 }
@@ -27,6 +302,7 @@ mixin _$WorkoutDetail {
   int? get estimatedDurationMinutes => throw _privateConstructorUsedError;
   MediaFile? get coverImage => throw _privateConstructorUsedError;
   List<ExerciseEntry> get exerciseEntries => throw _privateConstructorUsedError;
+  WorkoutLog? get latestLog => throw _privateConstructorUsedError;
 
   /// Serializes this WorkoutDetail to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,9 +328,11 @@ abstract class $WorkoutDetailCopyWith<$Res> {
     int? estimatedDurationMinutes,
     MediaFile? coverImage,
     List<ExerciseEntry> exerciseEntries,
+    WorkoutLog? latestLog,
   });
 
   $MediaFileCopyWith<$Res>? get coverImage;
+  $WorkoutLogCopyWith<$Res>? get latestLog;
 }
 
 /// @nodoc
@@ -78,6 +356,7 @@ class _$WorkoutDetailCopyWithImpl<$Res, $Val extends WorkoutDetail>
     Object? estimatedDurationMinutes = freezed,
     Object? coverImage = freezed,
     Object? exerciseEntries = null,
+    Object? latestLog = freezed,
   }) {
     return _then(
       _value.copyWith(
@@ -105,6 +384,10 @@ class _$WorkoutDetailCopyWithImpl<$Res, $Val extends WorkoutDetail>
                 ? _value.exerciseEntries
                 : exerciseEntries // ignore: cast_nullable_to_non_nullable
                       as List<ExerciseEntry>,
+            latestLog: freezed == latestLog
+                ? _value.latestLog
+                : latestLog // ignore: cast_nullable_to_non_nullable
+                      as WorkoutLog?,
           )
           as $Val,
     );
@@ -121,6 +404,20 @@ class _$WorkoutDetailCopyWithImpl<$Res, $Val extends WorkoutDetail>
 
     return $MediaFileCopyWith<$Res>(_value.coverImage!, (value) {
       return _then(_value.copyWith(coverImage: value) as $Val);
+    });
+  }
+
+  /// Create a copy of WorkoutDetail
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $WorkoutLogCopyWith<$Res>? get latestLog {
+    if (_value.latestLog == null) {
+      return null;
+    }
+
+    return $WorkoutLogCopyWith<$Res>(_value.latestLog!, (value) {
+      return _then(_value.copyWith(latestLog: value) as $Val);
     });
   }
 }
@@ -141,10 +438,13 @@ abstract class _$$WorkoutDetailImplCopyWith<$Res>
     int? estimatedDurationMinutes,
     MediaFile? coverImage,
     List<ExerciseEntry> exerciseEntries,
+    WorkoutLog? latestLog,
   });
 
   @override
   $MediaFileCopyWith<$Res>? get coverImage;
+  @override
+  $WorkoutLogCopyWith<$Res>? get latestLog;
 }
 
 /// @nodoc
@@ -167,6 +467,7 @@ class __$$WorkoutDetailImplCopyWithImpl<$Res>
     Object? estimatedDurationMinutes = freezed,
     Object? coverImage = freezed,
     Object? exerciseEntries = null,
+    Object? latestLog = freezed,
   }) {
     return _then(
       _$WorkoutDetailImpl(
@@ -194,6 +495,10 @@ class __$$WorkoutDetailImplCopyWithImpl<$Res>
             ? _value._exerciseEntries
             : exerciseEntries // ignore: cast_nullable_to_non_nullable
                   as List<ExerciseEntry>,
+        latestLog: freezed == latestLog
+            ? _value.latestLog
+            : latestLog // ignore: cast_nullable_to_non_nullable
+                  as WorkoutLog?,
       ),
     );
   }
@@ -209,6 +514,7 @@ class _$WorkoutDetailImpl implements _WorkoutDetail {
     this.estimatedDurationMinutes,
     this.coverImage,
     required final List<ExerciseEntry> exerciseEntries,
+    this.latestLog,
   }) : _exerciseEntries = exerciseEntries;
 
   factory _$WorkoutDetailImpl.fromJson(Map<String, dynamic> json) =>
@@ -233,8 +539,11 @@ class _$WorkoutDetailImpl implements _WorkoutDetail {
   }
 
   @override
+  final WorkoutLog? latestLog;
+
+  @override
   String toString() {
-    return 'WorkoutDetail(id: $id, title: $title, description: $description, estimatedDurationMinutes: $estimatedDurationMinutes, coverImage: $coverImage, exerciseEntries: $exerciseEntries)';
+    return 'WorkoutDetail(id: $id, title: $title, description: $description, estimatedDurationMinutes: $estimatedDurationMinutes, coverImage: $coverImage, exerciseEntries: $exerciseEntries, latestLog: $latestLog)';
   }
 
   @override
@@ -256,7 +565,9 @@ class _$WorkoutDetailImpl implements _WorkoutDetail {
             const DeepCollectionEquality().equals(
               other._exerciseEntries,
               _exerciseEntries,
-            ));
+            ) &&
+            (identical(other.latestLog, latestLog) ||
+                other.latestLog == latestLog));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -269,6 +580,7 @@ class _$WorkoutDetailImpl implements _WorkoutDetail {
     estimatedDurationMinutes,
     coverImage,
     const DeepCollectionEquality().hash(_exerciseEntries),
+    latestLog,
   );
 
   /// Create a copy of WorkoutDetail
@@ -293,6 +605,7 @@ abstract class _WorkoutDetail implements WorkoutDetail {
     final int? estimatedDurationMinutes,
     final MediaFile? coverImage,
     required final List<ExerciseEntry> exerciseEntries,
+    final WorkoutLog? latestLog,
   }) = _$WorkoutDetailImpl;
 
   factory _WorkoutDetail.fromJson(Map<String, dynamic> json) =
@@ -310,6 +623,8 @@ abstract class _WorkoutDetail implements WorkoutDetail {
   MediaFile? get coverImage;
   @override
   List<ExerciseEntry> get exerciseEntries;
+  @override
+  WorkoutLog? get latestLog;
 
   /// Create a copy of WorkoutDetail
   /// with the given fields replaced by the non-null parameter values.
@@ -921,6 +1236,7 @@ mixin _$WorkoutLog {
   DateTime get startedAt => throw _privateConstructorUsedError;
   DateTime? get completedAt => throw _privateConstructorUsedError;
   int? get durationSeconds => throw _privateConstructorUsedError;
+  List<ExerciseLogEntry> get exerciseLogs => throw _privateConstructorUsedError;
 
   /// Serializes this WorkoutLog to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -945,6 +1261,7 @@ abstract class $WorkoutLogCopyWith<$Res> {
     DateTime startedAt,
     DateTime? completedAt,
     int? durationSeconds,
+    List<ExerciseLogEntry> exerciseLogs,
   });
 }
 
@@ -968,6 +1285,7 @@ class _$WorkoutLogCopyWithImpl<$Res, $Val extends WorkoutLog>
     Object? startedAt = null,
     Object? completedAt = freezed,
     Object? durationSeconds = freezed,
+    Object? exerciseLogs = null,
   }) {
     return _then(
       _value.copyWith(
@@ -991,6 +1309,10 @@ class _$WorkoutLogCopyWithImpl<$Res, $Val extends WorkoutLog>
                 ? _value.durationSeconds
                 : durationSeconds // ignore: cast_nullable_to_non_nullable
                       as int?,
+            exerciseLogs: null == exerciseLogs
+                ? _value.exerciseLogs
+                : exerciseLogs // ignore: cast_nullable_to_non_nullable
+                      as List<ExerciseLogEntry>,
           )
           as $Val,
     );
@@ -1012,6 +1334,7 @@ abstract class _$$WorkoutLogImplCopyWith<$Res>
     DateTime startedAt,
     DateTime? completedAt,
     int? durationSeconds,
+    List<ExerciseLogEntry> exerciseLogs,
   });
 }
 
@@ -1034,6 +1357,7 @@ class __$$WorkoutLogImplCopyWithImpl<$Res>
     Object? startedAt = null,
     Object? completedAt = freezed,
     Object? durationSeconds = freezed,
+    Object? exerciseLogs = null,
   }) {
     return _then(
       _$WorkoutLogImpl(
@@ -1057,6 +1381,10 @@ class __$$WorkoutLogImplCopyWithImpl<$Res>
             ? _value.durationSeconds
             : durationSeconds // ignore: cast_nullable_to_non_nullable
                   as int?,
+        exerciseLogs: null == exerciseLogs
+            ? _value._exerciseLogs
+            : exerciseLogs // ignore: cast_nullable_to_non_nullable
+                  as List<ExerciseLogEntry>,
       ),
     );
   }
@@ -1071,7 +1399,8 @@ class _$WorkoutLogImpl implements _WorkoutLog {
     required this.startedAt,
     this.completedAt,
     this.durationSeconds,
-  });
+    final List<ExerciseLogEntry> exerciseLogs = const [],
+  }) : _exerciseLogs = exerciseLogs;
 
   factory _$WorkoutLogImpl.fromJson(Map<String, dynamic> json) =>
       _$$WorkoutLogImplFromJson(json);
@@ -1086,10 +1415,18 @@ class _$WorkoutLogImpl implements _WorkoutLog {
   final DateTime? completedAt;
   @override
   final int? durationSeconds;
+  final List<ExerciseLogEntry> _exerciseLogs;
+  @override
+  @JsonKey()
+  List<ExerciseLogEntry> get exerciseLogs {
+    if (_exerciseLogs is EqualUnmodifiableListView) return _exerciseLogs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_exerciseLogs);
+  }
 
   @override
   String toString() {
-    return 'WorkoutLog(id: $id, workout: $workout, startedAt: $startedAt, completedAt: $completedAt, durationSeconds: $durationSeconds)';
+    return 'WorkoutLog(id: $id, workout: $workout, startedAt: $startedAt, completedAt: $completedAt, durationSeconds: $durationSeconds, exerciseLogs: $exerciseLogs)';
   }
 
   @override
@@ -1104,7 +1441,11 @@ class _$WorkoutLogImpl implements _WorkoutLog {
             (identical(other.completedAt, completedAt) ||
                 other.completedAt == completedAt) &&
             (identical(other.durationSeconds, durationSeconds) ||
-                other.durationSeconds == durationSeconds));
+                other.durationSeconds == durationSeconds) &&
+            const DeepCollectionEquality().equals(
+              other._exerciseLogs,
+              _exerciseLogs,
+            ));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1116,6 +1457,7 @@ class _$WorkoutLogImpl implements _WorkoutLog {
     startedAt,
     completedAt,
     durationSeconds,
+    const DeepCollectionEquality().hash(_exerciseLogs),
   );
 
   /// Create a copy of WorkoutLog
@@ -1139,6 +1481,7 @@ abstract class _WorkoutLog implements WorkoutLog {
     required final DateTime startedAt,
     final DateTime? completedAt,
     final int? durationSeconds,
+    final List<ExerciseLogEntry> exerciseLogs,
   }) = _$WorkoutLogImpl;
 
   factory _WorkoutLog.fromJson(Map<String, dynamic> json) =
@@ -1154,11 +1497,296 @@ abstract class _WorkoutLog implements WorkoutLog {
   DateTime? get completedAt;
   @override
   int? get durationSeconds;
+  @override
+  List<ExerciseLogEntry> get exerciseLogs;
 
   /// Create a copy of WorkoutLog
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WorkoutLogImplCopyWith<_$WorkoutLogImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ExerciseLogEntry _$ExerciseLogEntryFromJson(Map<String, dynamic> json) {
+  return _ExerciseLogEntry.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ExerciseLogEntry {
+  String get exercise => throw _privateConstructorUsedError;
+  int get setsCompleted => throw _privateConstructorUsedError;
+  List<int> get repsPerSet =>
+      throw _privateConstructorUsedError; // ignore: invalid_annotation_target
+  @JsonKey(fromJson: _weightListFromJson)
+  List<double> get weightPerSet => throw _privateConstructorUsedError;
+  String get weightUnit => throw _privateConstructorUsedError;
+
+  /// Serializes this ExerciseLogEntry to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ExerciseLogEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ExerciseLogEntryCopyWith<ExerciseLogEntry> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ExerciseLogEntryCopyWith<$Res> {
+  factory $ExerciseLogEntryCopyWith(
+    ExerciseLogEntry value,
+    $Res Function(ExerciseLogEntry) then,
+  ) = _$ExerciseLogEntryCopyWithImpl<$Res, ExerciseLogEntry>;
+  @useResult
+  $Res call({
+    String exercise,
+    int setsCompleted,
+    List<int> repsPerSet,
+    @JsonKey(fromJson: _weightListFromJson) List<double> weightPerSet,
+    String weightUnit,
+  });
+}
+
+/// @nodoc
+class _$ExerciseLogEntryCopyWithImpl<$Res, $Val extends ExerciseLogEntry>
+    implements $ExerciseLogEntryCopyWith<$Res> {
+  _$ExerciseLogEntryCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ExerciseLogEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? exercise = null,
+    Object? setsCompleted = null,
+    Object? repsPerSet = null,
+    Object? weightPerSet = null,
+    Object? weightUnit = null,
+  }) {
+    return _then(
+      _value.copyWith(
+            exercise: null == exercise
+                ? _value.exercise
+                : exercise // ignore: cast_nullable_to_non_nullable
+                      as String,
+            setsCompleted: null == setsCompleted
+                ? _value.setsCompleted
+                : setsCompleted // ignore: cast_nullable_to_non_nullable
+                      as int,
+            repsPerSet: null == repsPerSet
+                ? _value.repsPerSet
+                : repsPerSet // ignore: cast_nullable_to_non_nullable
+                      as List<int>,
+            weightPerSet: null == weightPerSet
+                ? _value.weightPerSet
+                : weightPerSet // ignore: cast_nullable_to_non_nullable
+                      as List<double>,
+            weightUnit: null == weightUnit
+                ? _value.weightUnit
+                : weightUnit // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$ExerciseLogEntryImplCopyWith<$Res>
+    implements $ExerciseLogEntryCopyWith<$Res> {
+  factory _$$ExerciseLogEntryImplCopyWith(
+    _$ExerciseLogEntryImpl value,
+    $Res Function(_$ExerciseLogEntryImpl) then,
+  ) = __$$ExerciseLogEntryImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({
+    String exercise,
+    int setsCompleted,
+    List<int> repsPerSet,
+    @JsonKey(fromJson: _weightListFromJson) List<double> weightPerSet,
+    String weightUnit,
+  });
+}
+
+/// @nodoc
+class __$$ExerciseLogEntryImplCopyWithImpl<$Res>
+    extends _$ExerciseLogEntryCopyWithImpl<$Res, _$ExerciseLogEntryImpl>
+    implements _$$ExerciseLogEntryImplCopyWith<$Res> {
+  __$$ExerciseLogEntryImplCopyWithImpl(
+    _$ExerciseLogEntryImpl _value,
+    $Res Function(_$ExerciseLogEntryImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of ExerciseLogEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? exercise = null,
+    Object? setsCompleted = null,
+    Object? repsPerSet = null,
+    Object? weightPerSet = null,
+    Object? weightUnit = null,
+  }) {
+    return _then(
+      _$ExerciseLogEntryImpl(
+        exercise: null == exercise
+            ? _value.exercise
+            : exercise // ignore: cast_nullable_to_non_nullable
+                  as String,
+        setsCompleted: null == setsCompleted
+            ? _value.setsCompleted
+            : setsCompleted // ignore: cast_nullable_to_non_nullable
+                  as int,
+        repsPerSet: null == repsPerSet
+            ? _value._repsPerSet
+            : repsPerSet // ignore: cast_nullable_to_non_nullable
+                  as List<int>,
+        weightPerSet: null == weightPerSet
+            ? _value._weightPerSet
+            : weightPerSet // ignore: cast_nullable_to_non_nullable
+                  as List<double>,
+        weightUnit: null == weightUnit
+            ? _value.weightUnit
+            : weightUnit // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ExerciseLogEntryImpl implements _ExerciseLogEntry {
+  const _$ExerciseLogEntryImpl({
+    required this.exercise,
+    required this.setsCompleted,
+    final List<int> repsPerSet = const [],
+    @JsonKey(fromJson: _weightListFromJson)
+    final List<double> weightPerSet = const [],
+    required this.weightUnit,
+  }) : _repsPerSet = repsPerSet,
+       _weightPerSet = weightPerSet;
+
+  factory _$ExerciseLogEntryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ExerciseLogEntryImplFromJson(json);
+
+  @override
+  final String exercise;
+  @override
+  final int setsCompleted;
+  final List<int> _repsPerSet;
+  @override
+  @JsonKey()
+  List<int> get repsPerSet {
+    if (_repsPerSet is EqualUnmodifiableListView) return _repsPerSet;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_repsPerSet);
+  }
+
+  // ignore: invalid_annotation_target
+  final List<double> _weightPerSet;
+  // ignore: invalid_annotation_target
+  @override
+  @JsonKey(fromJson: _weightListFromJson)
+  List<double> get weightPerSet {
+    if (_weightPerSet is EqualUnmodifiableListView) return _weightPerSet;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_weightPerSet);
+  }
+
+  @override
+  final String weightUnit;
+
+  @override
+  String toString() {
+    return 'ExerciseLogEntry(exercise: $exercise, setsCompleted: $setsCompleted, repsPerSet: $repsPerSet, weightPerSet: $weightPerSet, weightUnit: $weightUnit)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ExerciseLogEntryImpl &&
+            (identical(other.exercise, exercise) ||
+                other.exercise == exercise) &&
+            (identical(other.setsCompleted, setsCompleted) ||
+                other.setsCompleted == setsCompleted) &&
+            const DeepCollectionEquality().equals(
+              other._repsPerSet,
+              _repsPerSet,
+            ) &&
+            const DeepCollectionEquality().equals(
+              other._weightPerSet,
+              _weightPerSet,
+            ) &&
+            (identical(other.weightUnit, weightUnit) ||
+                other.weightUnit == weightUnit));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+    runtimeType,
+    exercise,
+    setsCompleted,
+    const DeepCollectionEquality().hash(_repsPerSet),
+    const DeepCollectionEquality().hash(_weightPerSet),
+    weightUnit,
+  );
+
+  /// Create a copy of ExerciseLogEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ExerciseLogEntryImplCopyWith<_$ExerciseLogEntryImpl> get copyWith =>
+      __$$ExerciseLogEntryImplCopyWithImpl<_$ExerciseLogEntryImpl>(
+        this,
+        _$identity,
+      );
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ExerciseLogEntryImplToJson(this);
+  }
+}
+
+abstract class _ExerciseLogEntry implements ExerciseLogEntry {
+  const factory _ExerciseLogEntry({
+    required final String exercise,
+    required final int setsCompleted,
+    final List<int> repsPerSet,
+    @JsonKey(fromJson: _weightListFromJson) final List<double> weightPerSet,
+    required final String weightUnit,
+  }) = _$ExerciseLogEntryImpl;
+
+  factory _ExerciseLogEntry.fromJson(Map<String, dynamic> json) =
+      _$ExerciseLogEntryImpl.fromJson;
+
+  @override
+  String get exercise;
+  @override
+  int get setsCompleted;
+  @override
+  List<int> get repsPerSet; // ignore: invalid_annotation_target
+  @override
+  @JsonKey(fromJson: _weightListFromJson)
+  List<double> get weightPerSet;
+  @override
+  String get weightUnit;
+
+  /// Create a copy of ExerciseLogEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ExerciseLogEntryImplCopyWith<_$ExerciseLogEntryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

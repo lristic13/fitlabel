@@ -15,11 +15,11 @@ class ShellScreen extends StatelessWidget {
         onDestinationSelected: (index) => _onTap(context, index),
         destinations: const [
           NavigationDestination(
-            icon: Icon(Icons.fitness_center),
+            icon: Icon(Icons.calendar_today),
             label: 'Programs',
           ),
           NavigationDestination(
-            icon: Icon(Icons.sports_gymnastics),
+            icon: Icon(Icons.fitness_center),
             label: 'Workouts',
           ),
           NavigationDestination(

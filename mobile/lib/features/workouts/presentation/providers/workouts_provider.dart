@@ -22,7 +22,14 @@ WorkoutsRepository workoutsRepository(Ref ref) {
 }
 
 @riverpod
-Future<WorkoutDetail> workoutDetail(Ref ref, String id) {
+Future<List<WorkoutBrief>> workoutsList(Ref ref) {
   final repo = ref.watch(workoutsRepositoryProvider);
-  return repo.getWorkoutDetail(id);
+  return repo.getWorkouts();
+}
+
+@riverpod
+Future<WorkoutDetail> workoutDetail(
+    Ref ref, (String id, String? programDayId) args) {
+  final repo = ref.watch(workoutsRepositoryProvider);
+  return repo.getWorkoutDetail(args.$1, programDayId: args.$2);
 }

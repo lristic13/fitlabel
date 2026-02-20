@@ -6,6 +6,27 @@ part of 'workout.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$WorkoutBriefImpl _$$WorkoutBriefImplFromJson(Map<String, dynamic> json) =>
+    _$WorkoutBriefImpl(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      estimatedDurationMinutes: (json['estimated_duration_minutes'] as num?)
+          ?.toInt(),
+      coverImage: json['cover_image'] == null
+          ? null
+          : MediaFile.fromJson(json['cover_image'] as Map<String, dynamic>),
+      exerciseCount: (json['exercise_count'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$WorkoutBriefImplToJson(_$WorkoutBriefImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+      'estimated_duration_minutes': instance.estimatedDurationMinutes,
+      'cover_image': instance.coverImage,
+      'exercise_count': instance.exerciseCount,
+    };
+
 _$WorkoutDetailImpl _$$WorkoutDetailImplFromJson(Map<String, dynamic> json) =>
     _$WorkoutDetailImpl(
       id: json['id'] as String,
@@ -19,6 +40,9 @@ _$WorkoutDetailImpl _$$WorkoutDetailImplFromJson(Map<String, dynamic> json) =>
       exerciseEntries: (json['exercise_entries'] as List<dynamic>)
           .map((e) => ExerciseEntry.fromJson(e as Map<String, dynamic>))
           .toList(),
+      latestLog: json['latest_log'] == null
+          ? null
+          : WorkoutLog.fromJson(json['latest_log'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$WorkoutDetailImplToJson(_$WorkoutDetailImpl instance) =>
@@ -29,6 +53,7 @@ Map<String, dynamic> _$$WorkoutDetailImplToJson(_$WorkoutDetailImpl instance) =>
       'estimated_duration_minutes': instance.estimatedDurationMinutes,
       'cover_image': instance.coverImage,
       'exercise_entries': instance.exerciseEntries,
+      'latest_log': instance.latestLog,
     };
 
 _$ExerciseEntryImpl _$$ExerciseEntryImplFromJson(Map<String, dynamic> json) =>
@@ -86,6 +111,11 @@ _$WorkoutLogImpl _$$WorkoutLogImplFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['completed_at'] as String),
       durationSeconds: (json['duration_seconds'] as num?)?.toInt(),
+      exerciseLogs:
+          (json['exercise_logs'] as List<dynamic>?)
+              ?.map((e) => ExerciseLogEntry.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$WorkoutLogImplToJson(_$WorkoutLogImpl instance) =>
@@ -95,4 +125,31 @@ Map<String, dynamic> _$$WorkoutLogImplToJson(_$WorkoutLogImpl instance) =>
       'started_at': instance.startedAt.toIso8601String(),
       'completed_at': instance.completedAt?.toIso8601String(),
       'duration_seconds': instance.durationSeconds,
+      'exercise_logs': instance.exerciseLogs,
     };
+
+_$ExerciseLogEntryImpl _$$ExerciseLogEntryImplFromJson(
+  Map<String, dynamic> json,
+) => _$ExerciseLogEntryImpl(
+  exercise: json['exercise'] as String,
+  setsCompleted: (json['sets_completed'] as num).toInt(),
+  repsPerSet:
+      (json['reps_per_set'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList() ??
+      const [],
+  weightPerSet: json['weight_per_set'] == null
+      ? const []
+      : _weightListFromJson(json['weight_per_set']),
+  weightUnit: json['weight_unit'] as String,
+);
+
+Map<String, dynamic> _$$ExerciseLogEntryImplToJson(
+  _$ExerciseLogEntryImpl instance,
+) => <String, dynamic>{
+  'exercise': instance.exercise,
+  'sets_completed': instance.setsCompleted,
+  'reps_per_set': instance.repsPerSet,
+  'weight_per_set': instance.weightPerSet,
+  'weight_unit': instance.weightUnit,
+};

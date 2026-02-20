@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema
@@ -14,9 +15,27 @@ from .serializers import (
     ExerciseListSerializer,
     WorkoutCompleteSerializer,
     WorkoutDetailSerializer,
+    WorkoutListSerializer,
     WorkoutLogResponseSerializer,
     WorkoutStartSerializer,
 )
+
+
+class WorkoutListView(ListAPIView):
+    """
+    GET /v1/workouts/
+    List all workouts for the current tenant.
+    """
+
+    serializer_class = WorkoutListSerializer
+
+    def get_queryset(self):
+        return (
+            Workout.objects.filter(tenant=self.request.tenant)
+            .select_related("cover_image")
+            .annotate(exercise_count=Count("exercise_entries"))
+            .order_by("-created_at")
+        )
 
 
 class ExerciseListView(ListAPIView):

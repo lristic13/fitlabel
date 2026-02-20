@@ -5,10 +5,12 @@ from .views import (
     ExerciseListView,
     WorkoutCompleteView,
     WorkoutDetailView,
+    WorkoutListView,
     WorkoutStartView,
 )
 
 urlpatterns = [
+    path("workouts/", WorkoutListView.as_view(), name="workout-list"),
     path("exercises/", ExerciseListView.as_view(), name="exercise-list"),
     path("exercises/<uuid:pk>/", ExerciseDetailView.as_view(), name="exercise-detail"),
     path("workouts/<uuid:pk>/", WorkoutDetailView.as_view(), name="workout-detail"),

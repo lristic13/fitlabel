@@ -4,11 +4,13 @@ import 'package:fitlabel/features/programs/domain/models/program.dart';
 
 class ProgramWeekCard extends StatelessWidget {
   final ProgramWeek week;
+  final Set<int> completedDayIds;
   final void Function(ProgramDay day) onDayTap;
 
   const ProgramWeekCard({
     super.key,
     required this.week,
+    required this.completedDayIds,
     required this.onDayTap,
   });
 
@@ -30,7 +32,11 @@ class ProgramWeekCard extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             ...week.days.map(
-              (day) => ProgramDayTile(day: day, onTap: () => onDayTap(day)),
+              (day) => ProgramDayTile(
+                day: day,
+                isCompleted: completedDayIds.contains(day.id),
+                onTap: () => onDayTap(day),
+              ),
             ),
           ],
         ),
@@ -41,9 +47,15 @@ class ProgramWeekCard extends StatelessWidget {
 
 class ProgramDayTile extends StatelessWidget {
   final ProgramDay day;
+  final bool isCompleted;
   final VoidCallback onTap;
 
-  const ProgramDayTile({super.key, required this.day, required this.onTap});
+  const ProgramDayTile({
+    super.key,
+    required this.day,
+    required this.isCompleted,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,23 +66,28 @@ class ProgramDayTile extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
         radius: 16,
-        backgroundColor: isRest
-            ? theme.colorScheme.surfaceContainerHighest
-            : theme.colorScheme.primaryContainer,
-        child: Text(
-          '${day.dayNumber}',
-          style: theme.textTheme.labelMedium?.copyWith(
-            color: isRest
-                ? theme.colorScheme.onSurfaceVariant
-                : theme.colorScheme.onPrimaryContainer,
-          ),
-        ),
+        backgroundColor: isCompleted
+            ? theme.colorScheme.tertiary
+            : isRest
+                ? theme.colorScheme.surfaceContainerHighest
+                : theme.colorScheme.primaryContainer,
+        child: isCompleted
+            ? Icon(Icons.check, size: 16, color: theme.colorScheme.onTertiary)
+            : Text(
+                '${day.dayNumber}',
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: isRest
+                      ? theme.colorScheme.onSurfaceVariant
+                      : theme.colorScheme.onPrimaryContainer,
+                ),
+              ),
       ),
       title: Text(
         day.title,
         style: TextStyle(
           color: isRest ? theme.colorScheme.onSurfaceVariant : null,
           fontStyle: isRest ? FontStyle.italic : null,
+          decoration: isCompleted ? TextDecoration.lineThrough : null,
         ),
       ),
       subtitle: isRest
@@ -78,7 +95,12 @@ class ProgramDayTile extends StatelessWidget {
           : day.workoutTitle != null
               ? Text(day.workoutTitle!)
               : null,
-      trailing: isRest ? null : const Icon(Icons.chevron_right),
+      trailing: isCompleted
+          ? Icon(Icons.check_circle,
+              color: theme.colorScheme.tertiary, size: 20)
+          : isRest
+              ? null
+              : const Icon(Icons.chevron_right),
       enabled: !isRest && day.workoutId != null,
       onTap: isRest || day.workoutId == null ? null : onTap,
     );

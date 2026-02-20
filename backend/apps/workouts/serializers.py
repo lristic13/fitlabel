@@ -15,6 +15,23 @@ class MediaFileBriefSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "file_type", "file", "thumbnail", "external_playback_url"]
 
 
+class WorkoutListSerializer(serializers.ModelSerializer):
+    """Lean representation for workout browse lists."""
+
+    cover_image = MediaFileBriefSerializer(read_only=True)
+    exercise_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Workout
+        fields = [
+            "id",
+            "title",
+            "estimated_duration_minutes",
+            "cover_image",
+            "exercise_count",
+        ]
+
+
 class ExerciseListSerializer(serializers.ModelSerializer):
     demo_image = MediaFileBriefSerializer(read_only=True)
 
@@ -73,6 +90,7 @@ class ExerciseInWorkoutSerializer(serializers.ModelSerializer):
 class WorkoutDetailSerializer(serializers.ModelSerializer):
     cover_image = MediaFileBriefSerializer(read_only=True)
     exercise_entries = ExerciseInWorkoutSerializer(many=True, read_only=True)
+    latest_log = serializers.SerializerMethodField()
 
     class Meta:
         model = Workout
@@ -83,17 +101,52 @@ class WorkoutDetailSerializer(serializers.ModelSerializer):
             "estimated_duration_minutes",
             "cover_image",
             "exercise_entries",
+            "latest_log",
         ]
+
+    def get_latest_log(self, obj):
+        request = self.context.get("request")
+        if not request or not request.user.is_authenticated:
+            return None
+        filters = {"workout": obj, "user": request.user}
+        # When accessed from a program day context, scope to that day
+        program_day_id = request.query_params.get("program_day_id")
+        if program_day_id:
+            filters["program_day_id"] = program_day_id
+        log = (
+            WorkoutLog.objects.filter(**filters)
+            .order_by("-started_at")
+            .first()
+        )
+        if log is None:
+            return None
+        return WorkoutLogResponseSerializer(log).data
 
 
 class WorkoutStartSerializer(serializers.Serializer):
     """Request body for starting a workout session."""
 
-    program_day_id = serializers.UUIDField(required=False, allow_null=True)
+    program_day_id = serializers.IntegerField(required=False, allow_null=True)
+
+
+class ExerciseLogOutputSerializer(serializers.ModelSerializer):
+    """Read-only representation of a logged exercise."""
+
+    class Meta:
+        model = ExerciseLog
+        fields = [
+            "exercise",
+            "sets_completed",
+            "reps_per_set",
+            "weight_per_set",
+            "weight_unit",
+        ]
 
 
 class WorkoutLogResponseSerializer(serializers.ModelSerializer):
     """Response for start/complete workout."""
+
+    exercise_logs = ExerciseLogOutputSerializer(many=True, read_only=True)
 
     class Meta:
         model = WorkoutLog
@@ -103,6 +156,7 @@ class WorkoutLogResponseSerializer(serializers.ModelSerializer):
             "started_at",
             "completed_at",
             "duration_seconds",
+            "exercise_logs",
         ]
 
 
@@ -131,5 +185,5 @@ class WorkoutCompleteSerializer(serializers.Serializer):
     """Request body for completing a workout session."""
 
     workout_log_id = serializers.UUIDField()
-    notes = serializers.CharField(required=False, default="")
+    notes = serializers.CharField(required=False, default="", allow_blank=True)
     exercise_logs = ExerciseLogInputSerializer(many=True, required=False, default=list)
