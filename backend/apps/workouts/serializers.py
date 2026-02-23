@@ -20,6 +20,7 @@ class WorkoutListSerializer(serializers.ModelSerializer):
 
     cover_image = MediaFileBriefSerializer(read_only=True)
     exercise_count = serializers.IntegerField(read_only=True)
+    muscle_groups = serializers.SerializerMethodField()
 
     class Meta:
         model = Workout
@@ -29,7 +30,15 @@ class WorkoutListSerializer(serializers.ModelSerializer):
             "estimated_duration_minutes",
             "cover_image",
             "exercise_count",
+            "muscle_groups",
         ]
+
+    def get_muscle_groups(self, obj):
+        groups = set()
+        for entry in obj.exercise_entries.all():
+            for g in entry.exercise.muscle_groups or []:
+                groups.add(g)
+        return sorted(groups)
 
 
 class ExerciseListSerializer(serializers.ModelSerializer):

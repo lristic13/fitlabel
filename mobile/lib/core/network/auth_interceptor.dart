@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fitlabel/config/api_config.dart';
+import 'package:fitlabel/config/app_config.dart';
 import 'package:fitlabel/core/storage/secure_storage.dart';
 
 class AuthInterceptor extends Interceptor {
@@ -23,11 +24,9 @@ class AuthInterceptor extends Interceptor {
       options.headers['Authorization'] = 'Bearer $accessToken';
     }
 
-    // Attach tenant slug if available
-    final tenantSlug = await _storage.getTenantSlug();
-    if (tenantSlug != null) {
-      options.headers['X-Tenant-Slug'] = tenantSlug;
-    }
+    // Attach tenant slug (fall back to hardcoded config if not yet persisted)
+    final tenantSlug = await _storage.getTenantSlug() ?? AppConfig.tenantSlug;
+    options.headers['X-Tenant-Slug'] = tenantSlug;
 
     handler.next(options);
   }

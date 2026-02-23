@@ -6,8 +6,23 @@ class WorkoutsRemoteDataSource {
 
   WorkoutsRemoteDataSource({required ApiClient client}) : _client = client;
 
-  Future<List<dynamic>> getWorkouts() {
-    return _client.getList(ApiConfig.workouts);
+  Future<List<dynamic>> getWorkouts({
+    String? search,
+    List<String>? muscleGroups,
+  }) {
+    final queryParams = <String, dynamic>{};
+    if (search != null && search.isNotEmpty) queryParams['search'] = search;
+    if (muscleGroups != null && muscleGroups.isNotEmpty) {
+      queryParams['muscle_groups'] = muscleGroups.join(',');
+    }
+    return _client.getList(
+      ApiConfig.workouts,
+      queryParameters: queryParams.isNotEmpty ? queryParams : null,
+    );
+  }
+
+  Future<List<dynamic>> getMuscleGroups() {
+    return _client.getRawList(ApiConfig.muscleGroups);
   }
 
   Future<Map<String, dynamic>> getWorkoutDetail(String id,

@@ -27,6 +27,55 @@ Future<List<WorkoutBrief>> workoutsList(Ref ref) {
   return repo.getWorkouts();
 }
 
+@Riverpod(keepAlive: true)
+Future<List<MuscleGroup>> muscleGroups(Ref ref) {
+  final repo = ref.watch(workoutsRepositoryProvider);
+  return repo.getMuscleGroups();
+}
+
+const _kClientFilterThreshold = 50;
+
+/// [selectedGroups] is a comma-separated string (e.g. "chest,back") to
+/// ensure stable equality for the family provider key.
+@riverpod
+Future<List<WorkoutBrief>> filteredWorkouts(
+  Ref ref, {
+  String search = '',
+  String selectedGroups = '',
+}) async {
+  final repo = ref.watch(workoutsRepositoryProvider);
+  final allWorkouts = ref.watch(workoutsListProvider).valueOrNull;
+
+  final hasSearch = search.isNotEmpty;
+  final groups =
+      selectedGroups.isEmpty ? <String>[] : selectedGroups.split(',');
+  final hasGroups = groups.isNotEmpty;
+
+  // No filters active — return full list
+  if (!hasSearch && !hasGroups) {
+    return allWorkouts ?? await repo.getWorkouts();
+  }
+
+  // If we have the full list cached and it's small, filter client-side
+  if (allWorkouts != null && allWorkouts.length <= _kClientFilterThreshold) {
+    return allWorkouts.where((w) {
+      if (hasSearch && !w.title.toLowerCase().contains(search.toLowerCase())) {
+        return false;
+      }
+      if (hasGroups && !w.muscleGroups.any((g) => groups.contains(g))) {
+        return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  // Large list or not cached — delegate to API
+  return repo.getWorkouts(
+    search: hasSearch ? search : null,
+    muscleGroups: hasGroups ? groups : null,
+  );
+}
+
 @riverpod
 Future<WorkoutDetail> workoutDetail(
     Ref ref, (String id, String? programDayId) args) {

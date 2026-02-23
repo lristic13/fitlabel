@@ -61,7 +61,24 @@ final workoutsListProvider =
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef WorkoutsListRef = AutoDisposeFutureProviderRef<List<WorkoutBrief>>;
-String _$workoutDetailHash() => r'1d9d50067e2d8dfec9beef3a49af6cfbea058fb2';
+String _$muscleGroupsHash() => r'2849ab30d43faeb24a721c52cf370bb529996495';
+
+/// See also [muscleGroups].
+@ProviderFor(muscleGroups)
+final muscleGroupsProvider = FutureProvider<List<MuscleGroup>>.internal(
+  muscleGroups,
+  name: r'muscleGroupsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$muscleGroupsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef MuscleGroupsRef = FutureProviderRef<List<MuscleGroup>>;
+String _$filteredWorkoutsHash() => r'dd0a5f799087fb782c31d790cb85cbe56e005755';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -83,6 +100,171 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
+
+/// [selectedGroups] is a comma-separated string (e.g. "chest,back") to
+/// ensure stable equality for the family provider key.
+///
+/// Copied from [filteredWorkouts].
+@ProviderFor(filteredWorkouts)
+const filteredWorkoutsProvider = FilteredWorkoutsFamily();
+
+/// [selectedGroups] is a comma-separated string (e.g. "chest,back") to
+/// ensure stable equality for the family provider key.
+///
+/// Copied from [filteredWorkouts].
+class FilteredWorkoutsFamily extends Family<AsyncValue<List<WorkoutBrief>>> {
+  /// [selectedGroups] is a comma-separated string (e.g. "chest,back") to
+  /// ensure stable equality for the family provider key.
+  ///
+  /// Copied from [filteredWorkouts].
+  const FilteredWorkoutsFamily();
+
+  /// [selectedGroups] is a comma-separated string (e.g. "chest,back") to
+  /// ensure stable equality for the family provider key.
+  ///
+  /// Copied from [filteredWorkouts].
+  FilteredWorkoutsProvider call({
+    String search = '',
+    String selectedGroups = '',
+  }) {
+    return FilteredWorkoutsProvider(
+      search: search,
+      selectedGroups: selectedGroups,
+    );
+  }
+
+  @override
+  FilteredWorkoutsProvider getProviderOverride(
+    covariant FilteredWorkoutsProvider provider,
+  ) {
+    return call(
+      search: provider.search,
+      selectedGroups: provider.selectedGroups,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'filteredWorkoutsProvider';
+}
+
+/// [selectedGroups] is a comma-separated string (e.g. "chest,back") to
+/// ensure stable equality for the family provider key.
+///
+/// Copied from [filteredWorkouts].
+class FilteredWorkoutsProvider
+    extends AutoDisposeFutureProvider<List<WorkoutBrief>> {
+  /// [selectedGroups] is a comma-separated string (e.g. "chest,back") to
+  /// ensure stable equality for the family provider key.
+  ///
+  /// Copied from [filteredWorkouts].
+  FilteredWorkoutsProvider({String search = '', String selectedGroups = ''})
+    : this._internal(
+        (ref) => filteredWorkouts(
+          ref as FilteredWorkoutsRef,
+          search: search,
+          selectedGroups: selectedGroups,
+        ),
+        from: filteredWorkoutsProvider,
+        name: r'filteredWorkoutsProvider',
+        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+            ? null
+            : _$filteredWorkoutsHash,
+        dependencies: FilteredWorkoutsFamily._dependencies,
+        allTransitiveDependencies:
+            FilteredWorkoutsFamily._allTransitiveDependencies,
+        search: search,
+        selectedGroups: selectedGroups,
+      );
+
+  FilteredWorkoutsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.search,
+    required this.selectedGroups,
+  }) : super.internal();
+
+  final String search;
+  final String selectedGroups;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<WorkoutBrief>> Function(FilteredWorkoutsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FilteredWorkoutsProvider._internal(
+        (ref) => create(ref as FilteredWorkoutsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        search: search,
+        selectedGroups: selectedGroups,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<WorkoutBrief>> createElement() {
+    return _FilteredWorkoutsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FilteredWorkoutsProvider &&
+        other.search == search &&
+        other.selectedGroups == selectedGroups;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, search.hashCode);
+    hash = _SystemHash.combine(hash, selectedGroups.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin FilteredWorkoutsRef on AutoDisposeFutureProviderRef<List<WorkoutBrief>> {
+  /// The parameter `search` of this provider.
+  String get search;
+
+  /// The parameter `selectedGroups` of this provider.
+  String get selectedGroups;
+}
+
+class _FilteredWorkoutsProviderElement
+    extends AutoDisposeFutureProviderElement<List<WorkoutBrief>>
+    with FilteredWorkoutsRef {
+  _FilteredWorkoutsProviderElement(super.provider);
+
+  @override
+  String get search => (origin as FilteredWorkoutsProvider).search;
+  @override
+  String get selectedGroups =>
+      (origin as FilteredWorkoutsProvider).selectedGroups;
+}
+
+String _$workoutDetailHash() => r'1d9d50067e2d8dfec9beef3a49af6cfbea058fb2';
 
 /// See also [workoutDetail].
 @ProviderFor(workoutDetail)

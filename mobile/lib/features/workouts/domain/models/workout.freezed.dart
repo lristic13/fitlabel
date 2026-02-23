@@ -26,6 +26,7 @@ mixin _$WorkoutBrief {
   int? get estimatedDurationMinutes => throw _privateConstructorUsedError;
   MediaFile? get coverImage => throw _privateConstructorUsedError;
   int get exerciseCount => throw _privateConstructorUsedError;
+  List<String> get muscleGroups => throw _privateConstructorUsedError;
 
   /// Serializes this WorkoutBrief to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,6 +51,7 @@ abstract class $WorkoutBriefCopyWith<$Res> {
     int? estimatedDurationMinutes,
     MediaFile? coverImage,
     int exerciseCount,
+    List<String> muscleGroups,
   });
 
   $MediaFileCopyWith<$Res>? get coverImage;
@@ -75,6 +77,7 @@ class _$WorkoutBriefCopyWithImpl<$Res, $Val extends WorkoutBrief>
     Object? estimatedDurationMinutes = freezed,
     Object? coverImage = freezed,
     Object? exerciseCount = null,
+    Object? muscleGroups = null,
   }) {
     return _then(
       _value.copyWith(
@@ -98,6 +101,10 @@ class _$WorkoutBriefCopyWithImpl<$Res, $Val extends WorkoutBrief>
                 ? _value.exerciseCount
                 : exerciseCount // ignore: cast_nullable_to_non_nullable
                       as int,
+            muscleGroups: null == muscleGroups
+                ? _value.muscleGroups
+                : muscleGroups // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
           )
           as $Val,
     );
@@ -133,6 +140,7 @@ abstract class _$$WorkoutBriefImplCopyWith<$Res>
     int? estimatedDurationMinutes,
     MediaFile? coverImage,
     int exerciseCount,
+    List<String> muscleGroups,
   });
 
   @override
@@ -158,6 +166,7 @@ class __$$WorkoutBriefImplCopyWithImpl<$Res>
     Object? estimatedDurationMinutes = freezed,
     Object? coverImage = freezed,
     Object? exerciseCount = null,
+    Object? muscleGroups = null,
   }) {
     return _then(
       _$WorkoutBriefImpl(
@@ -181,6 +190,10 @@ class __$$WorkoutBriefImplCopyWithImpl<$Res>
             ? _value.exerciseCount
             : exerciseCount // ignore: cast_nullable_to_non_nullable
                   as int,
+        muscleGroups: null == muscleGroups
+            ? _value._muscleGroups
+            : muscleGroups // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
       ),
     );
   }
@@ -195,7 +208,8 @@ class _$WorkoutBriefImpl implements _WorkoutBrief {
     this.estimatedDurationMinutes,
     this.coverImage,
     required this.exerciseCount,
-  });
+    final List<String> muscleGroups = const [],
+  }) : _muscleGroups = muscleGroups;
 
   factory _$WorkoutBriefImpl.fromJson(Map<String, dynamic> json) =>
       _$$WorkoutBriefImplFromJson(json);
@@ -210,10 +224,18 @@ class _$WorkoutBriefImpl implements _WorkoutBrief {
   final MediaFile? coverImage;
   @override
   final int exerciseCount;
+  final List<String> _muscleGroups;
+  @override
+  @JsonKey()
+  List<String> get muscleGroups {
+    if (_muscleGroups is EqualUnmodifiableListView) return _muscleGroups;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_muscleGroups);
+  }
 
   @override
   String toString() {
-    return 'WorkoutBrief(id: $id, title: $title, estimatedDurationMinutes: $estimatedDurationMinutes, coverImage: $coverImage, exerciseCount: $exerciseCount)';
+    return 'WorkoutBrief(id: $id, title: $title, estimatedDurationMinutes: $estimatedDurationMinutes, coverImage: $coverImage, exerciseCount: $exerciseCount, muscleGroups: $muscleGroups)';
   }
 
   @override
@@ -231,7 +253,11 @@ class _$WorkoutBriefImpl implements _WorkoutBrief {
             (identical(other.coverImage, coverImage) ||
                 other.coverImage == coverImage) &&
             (identical(other.exerciseCount, exerciseCount) ||
-                other.exerciseCount == exerciseCount));
+                other.exerciseCount == exerciseCount) &&
+            const DeepCollectionEquality().equals(
+              other._muscleGroups,
+              _muscleGroups,
+            ));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -243,6 +269,7 @@ class _$WorkoutBriefImpl implements _WorkoutBrief {
     estimatedDurationMinutes,
     coverImage,
     exerciseCount,
+    const DeepCollectionEquality().hash(_muscleGroups),
   );
 
   /// Create a copy of WorkoutBrief
@@ -266,6 +293,7 @@ abstract class _WorkoutBrief implements WorkoutBrief {
     final int? estimatedDurationMinutes,
     final MediaFile? coverImage,
     required final int exerciseCount,
+    final List<String> muscleGroups,
   }) = _$WorkoutBriefImpl;
 
   factory _WorkoutBrief.fromJson(Map<String, dynamic> json) =
@@ -281,12 +309,182 @@ abstract class _WorkoutBrief implements WorkoutBrief {
   MediaFile? get coverImage;
   @override
   int get exerciseCount;
+  @override
+  List<String> get muscleGroups;
 
   /// Create a copy of WorkoutBrief
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WorkoutBriefImplCopyWith<_$WorkoutBriefImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+MuscleGroup _$MuscleGroupFromJson(Map<String, dynamic> json) {
+  return _MuscleGroup.fromJson(json);
+}
+
+/// @nodoc
+mixin _$MuscleGroup {
+  String get value => throw _privateConstructorUsedError;
+  String get label => throw _privateConstructorUsedError;
+
+  /// Serializes this MuscleGroup to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of MuscleGroup
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $MuscleGroupCopyWith<MuscleGroup> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MuscleGroupCopyWith<$Res> {
+  factory $MuscleGroupCopyWith(
+    MuscleGroup value,
+    $Res Function(MuscleGroup) then,
+  ) = _$MuscleGroupCopyWithImpl<$Res, MuscleGroup>;
+  @useResult
+  $Res call({String value, String label});
+}
+
+/// @nodoc
+class _$MuscleGroupCopyWithImpl<$Res, $Val extends MuscleGroup>
+    implements $MuscleGroupCopyWith<$Res> {
+  _$MuscleGroupCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of MuscleGroup
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? value = null, Object? label = null}) {
+    return _then(
+      _value.copyWith(
+            value: null == value
+                ? _value.value
+                : value // ignore: cast_nullable_to_non_nullable
+                      as String,
+            label: null == label
+                ? _value.label
+                : label // ignore: cast_nullable_to_non_nullable
+                      as String,
+          )
+          as $Val,
+    );
+  }
+}
+
+/// @nodoc
+abstract class _$$MuscleGroupImplCopyWith<$Res>
+    implements $MuscleGroupCopyWith<$Res> {
+  factory _$$MuscleGroupImplCopyWith(
+    _$MuscleGroupImpl value,
+    $Res Function(_$MuscleGroupImpl) then,
+  ) = __$$MuscleGroupImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String value, String label});
+}
+
+/// @nodoc
+class __$$MuscleGroupImplCopyWithImpl<$Res>
+    extends _$MuscleGroupCopyWithImpl<$Res, _$MuscleGroupImpl>
+    implements _$$MuscleGroupImplCopyWith<$Res> {
+  __$$MuscleGroupImplCopyWithImpl(
+    _$MuscleGroupImpl _value,
+    $Res Function(_$MuscleGroupImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of MuscleGroup
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({Object? value = null, Object? label = null}) {
+    return _then(
+      _$MuscleGroupImpl(
+        value: null == value
+            ? _value.value
+            : value // ignore: cast_nullable_to_non_nullable
+                  as String,
+        label: null == label
+            ? _value.label
+            : label // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$MuscleGroupImpl implements _MuscleGroup {
+  const _$MuscleGroupImpl({required this.value, required this.label});
+
+  factory _$MuscleGroupImpl.fromJson(Map<String, dynamic> json) =>
+      _$$MuscleGroupImplFromJson(json);
+
+  @override
+  final String value;
+  @override
+  final String label;
+
+  @override
+  String toString() {
+    return 'MuscleGroup(value: $value, label: $label)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MuscleGroupImpl &&
+            (identical(other.value, value) || other.value == value) &&
+            (identical(other.label, label) || other.label == label));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, value, label);
+
+  /// Create a copy of MuscleGroup
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MuscleGroupImplCopyWith<_$MuscleGroupImpl> get copyWith =>
+      __$$MuscleGroupImplCopyWithImpl<_$MuscleGroupImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$MuscleGroupImplToJson(this);
+  }
+}
+
+abstract class _MuscleGroup implements MuscleGroup {
+  const factory _MuscleGroup({
+    required final String value,
+    required final String label,
+  }) = _$MuscleGroupImpl;
+
+  factory _MuscleGroup.fromJson(Map<String, dynamic> json) =
+      _$MuscleGroupImpl.fromJson;
+
+  @override
+  String get value;
+  @override
+  String get label;
+
+  /// Create a copy of MuscleGroup
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$MuscleGroupImplCopyWith<_$MuscleGroupImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

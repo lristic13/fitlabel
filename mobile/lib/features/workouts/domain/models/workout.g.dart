@@ -16,6 +16,11 @@ _$WorkoutBriefImpl _$$WorkoutBriefImplFromJson(Map<String, dynamic> json) =>
           ? null
           : MediaFile.fromJson(json['cover_image'] as Map<String, dynamic>),
       exerciseCount: (json['exercise_count'] as num).toInt(),
+      muscleGroups:
+          (json['muscle_groups'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$WorkoutBriefImplToJson(_$WorkoutBriefImpl instance) =>
@@ -25,7 +30,17 @@ Map<String, dynamic> _$$WorkoutBriefImplToJson(_$WorkoutBriefImpl instance) =>
       'estimated_duration_minutes': instance.estimatedDurationMinutes,
       'cover_image': instance.coverImage,
       'exercise_count': instance.exerciseCount,
+      'muscle_groups': instance.muscleGroups,
     };
+
+_$MuscleGroupImpl _$$MuscleGroupImplFromJson(Map<String, dynamic> json) =>
+    _$MuscleGroupImpl(
+      value: json['value'] as String,
+      label: json['label'] as String,
+    );
+
+Map<String, dynamic> _$$MuscleGroupImplToJson(_$MuscleGroupImpl instance) =>
+    <String, dynamic>{'value': instance.value, 'label': instance.label};
 
 _$WorkoutDetailImpl _$$WorkoutDetailImplFromJson(Map<String, dynamic> json) =>
     _$WorkoutDetailImpl(

@@ -59,6 +59,18 @@ class ApiClient {
     }
   }
 
+  Future<List<dynamic>> getRawList(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
+    try {
+      final response = await dio.get(path, queryParameters: queryParameters);
+      return response.data as List<dynamic>;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   Future<Map<String, dynamic>> post(
     String path, {
     Map<String, dynamic>? data,
