@@ -14,10 +14,22 @@ class WorkoutBrief with _$WorkoutBrief {
     int? estimatedDurationMinutes,
     MediaFile? coverImage,
     required int exerciseCount,
+    @Default([]) List<String> muscleGroups,
   }) = _WorkoutBrief;
 
   factory WorkoutBrief.fromJson(Map<String, dynamic> json) =>
       _$WorkoutBriefFromJson(json);
+}
+
+@freezed
+class MuscleGroup with _$MuscleGroup {
+  const factory MuscleGroup({
+    required String value,
+    required String label,
+  }) = _MuscleGroup;
+
+  factory MuscleGroup.fromJson(Map<String, dynamic> json) =>
+      _$MuscleGroupFromJson(json);
 }
 
 @freezed

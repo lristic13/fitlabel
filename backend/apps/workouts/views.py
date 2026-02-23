@@ -4,6 +4,7 @@ from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -21,21 +22,67 @@ from .serializers import (
 )
 
 
+class MuscleGroupListView(APIView):
+    """
+    GET /v1/exercises/muscle-groups/
+    Returns the fixed list of muscle-group categories.
+    """
+
+    permission_classes = [AllowAny]
+
+    MUSCLE_GROUPS = [
+        {"value": "chest", "label": "Chest"},
+        {"value": "back", "label": "Back"},
+        {"value": "shoulders", "label": "Shoulders"},
+        {"value": "biceps", "label": "Biceps"},
+        {"value": "triceps", "label": "Triceps"},
+        {"value": "legs", "label": "Legs"},
+        {"value": "glutes", "label": "Glutes"},
+        {"value": "core", "label": "Core"},
+        {"value": "full_body", "label": "Full Body"},
+        {"value": "cardio", "label": "Cardio"},
+    ]
+
+    def get(self, request):
+        return Response(self.MUSCLE_GROUPS)
+
+
 class WorkoutListView(ListAPIView):
     """
     GET /v1/workouts/
     List all workouts for the current tenant.
+    Supports optional ?search= and ?muscle_groups= query params.
     """
 
     serializer_class = WorkoutListSerializer
 
     def get_queryset(self):
-        return (
+        qs = (
             Workout.objects.filter(tenant=self.request.tenant)
             .select_related("cover_image")
+            .prefetch_related("exercise_entries__exercise")
             .annotate(exercise_count=Count("exercise_entries"))
             .order_by("-created_at")
         )
+
+        search = self.request.query_params.get("search")
+        if search:
+            qs = qs.filter(title__icontains=search)
+
+        muscle_groups = self.request.query_params.get("muscle_groups")
+        if muscle_groups:
+            groups = [g.strip() for g in muscle_groups.split(",") if g.strip()]
+            if groups:
+                from django.db.models import Q
+
+                mg_filter = Q()
+                for group in groups:
+                    mg_filter |= Q(
+                        exercise_entries__exercise__muscle_groups__contains=[group]
+                    )
+                qs = qs.filter(mg_filter).distinct()
+
+        return qs
 
 
 class ExerciseListView(ListAPIView):

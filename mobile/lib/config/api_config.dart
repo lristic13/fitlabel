@@ -28,6 +28,7 @@ class ApiConfig {
 
   // Exercises
   static const String exercises = '/v1/exercises/';
+  static const String muscleGroups = '/v1/exercises/muscle-groups/';
   static String exerciseDetail(String id) => '/v1/exercises/$id/';
 
   // Content

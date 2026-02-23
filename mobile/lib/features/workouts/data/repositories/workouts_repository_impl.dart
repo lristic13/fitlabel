@@ -9,10 +9,24 @@ class WorkoutsRepositoryImpl implements WorkoutsRepository {
       : _dataSource = dataSource;
 
   @override
-  Future<List<WorkoutBrief>> getWorkouts() async {
-    final list = await _dataSource.getWorkouts();
+  Future<List<WorkoutBrief>> getWorkouts({
+    String? search,
+    List<String>? muscleGroups,
+  }) async {
+    final list = await _dataSource.getWorkouts(
+      search: search,
+      muscleGroups: muscleGroups,
+    );
     return list
         .map((json) => WorkoutBrief.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
+
+  @override
+  Future<List<MuscleGroup>> getMuscleGroups() async {
+    final list = await _dataSource.getMuscleGroups();
+    return list
+        .map((json) => MuscleGroup.fromJson(json as Map<String, dynamic>))
         .toList();
   }
 
