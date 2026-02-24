@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitLabel — Your Brand. Your App. Your Empire.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #0A0A0B;
+  --bg-secondary: #111113;
+  --bg-card: #161618;
+  --bg-card-hover: #1C1C1F;
+  --accent: #C8FF2E;
+  --accent-dim: rgba(200, 255, 46, 0.15);
+  --accent-glow: rgba(200, 255, 46, 0.3);
+  --text-primary: #F5F5F7;
+  --text-secondary: #8E8E93;
+  --text-muted: #58585E;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(200, 255, 46, 0.2);
+  --gradient-dark: linear-gradient(180deg, #0A0A0B 0%, #111113 100%);
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===================== NOISE OVERLAY ===================== */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ===================== NAV ===================== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 20px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 10, 11, 0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text-primary); }
+
+.nav-cta {
+  background: var(--accent);
+  color: #0A0A0B;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.25s;
+  letter-spacing: 0.3px;
+}
+
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 24px var(--accent-glow);
+  color: #0A0A0B;
+}
+
+/* ===================== HERO ===================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 140px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, transparent, var(--bg-primary));
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: var(--accent-dim);
+  border: 1px solid var(--border-accent);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 36px;
+  letter-spacing: 0.5px;
+  animation: fadeInDown 0.8s ease-out both;
+}
+
+.hero-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 10vw, 140px);
+  line-height: 0.9;
+  letter-spacing: -1px;
+  margin-bottom: 28px;
+  animation: fadeInUp 0.8s ease-out 0.15s both;
+}
+
+.hero h1 .accent { color: var(--accent); }
+
+.hero-sub {
+  font-size: 20px;
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+  font-weight: 400;
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  animation: fadeInUp 0.8s ease-out 0.45s both;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #0A0A0B;
+  padding: 16px 36px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px var(--accent-glow);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  padding: 16px 36px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  border-color: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.03);
+}
+
+.hero-phones {
+  margin-top: 80px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-end;
+  perspective: 1200px;
+  animation: fadeInUp 1s ease-out 0.6s both;
+  position: relative;
+  z-index: 2;
+}
+
+.phone-mockup {
+  width: 260px;
+  height: 520px;
+  background: var(--bg-card);
+  border-radius: 36px;
+  border: 2px solid var(--border);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  transition: transform 0.5s ease;
+}
+
+.phone-mockup:nth-child(1) { transform: rotate(-6deg) translateY(20px); }
+.phone-mockup:nth-child(2) { transform: scale(1.05); z-index: 2; }
+.phone-mockup:nth-child(3) { transform: rotate(6deg) translateY(20px); }
+
+.phone-mockup:hover { transform: scale(1.08) translateY(-8px) !important; }
+
+.phone-notch {
+  width: 120px;
+  height: 28px;
+  background: var(--bg-primary);
+  border-radius: 0 0 20px 20px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.phone-screen {
+  padding: 16px;
+  height: calc(100% - 28px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Phone Screen 1 - Programs */
+.screen-programs .screen-header {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.program-card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.program-card .tag {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--accent);
+  color: #0A0A0B;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.program-card h4 { font-size: 14px; margin-bottom: 4px; }
+.program-card p { font-size: 11px; color: var(--text-secondary); }
+
+.program-card-alt {
+  background: linear-gradient(135deg, #1a2e1a 0%, #162e21 100%);
+}
+
+/* Phone Screen 2 - Workout Active */
+.screen-workout .workout-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.screen-workout .workout-meta {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.exercise-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+}
+
+.exercise-thumb {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #2a2a3e, #1a1a2e);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.exercise-info h5 { font-size: 13px; margin-bottom: 2px; }
+.exercise-info span { font-size: 11px; color: var(--text-secondary); }
+
+.exercise-check {
+  margin-left: auto;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--text-muted);
+  flex-shrink: 0;
+}
+
+.exercise-check.done {
+  background: var(--accent);
+  border-color: var(--accent);
+  position: relative;
+}
+
+.exercise-check.done::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #0A0A0B;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* Phone Screen 3 - Progress */
+.screen-progress .screen-header {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.stat-box {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 12px;
+  text-align: center;
+}
+
+.stat-box .number {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-box .label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.streak-bar {
+  display: flex;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.streak-bar .day {
+  flex: 1;
+  height: 32px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.streak-bar .day.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0A0A0B;
+}
+
+.streak-bar .day.current {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ===================== LOGOS BAR ===================== */
+.logos-bar {
+  padding: 60px 48px;
+  text-align: center;
+  position: relative;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.logos-bar p {
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 32px;
+}
+
+.logo-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 64px;
+  flex-wrap: wrap;
+  opacity: 0.4;
+}
+
+.logo-row span {
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 3px;
+  color: var(--text-primary);
+}
+
+/* ===================== FEATURES ===================== */
+.features {
+  padding: 140px 48px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5vw, 68px);
+  line-height: 1;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.section-desc {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 64px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 28px;
+  transition: all 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+
+.feature-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  transform: translateY(-4px);
+}
+
+.feature-card:hover::before { opacity: 1; }
+
+.feature-icon {
+  width: 52px;
+  height: 52px;
+  background: var(--accent-dim);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.feature-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===================== CRM SECTION ===================== */
+.crm-section {
+  padding: 140px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.crm-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -200px;
+  transform: translateY(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.crm-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.crm-text .section-desc { margin-bottom: 40px; }
+
+.crm-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.crm-feature-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.crm-feature-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--accent-dim);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.crm-feature-item h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.crm-feature-item p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* CRM Mockup */
+.crm-mockup {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+}
+
+.crm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border);
+}
+
+.crm-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.crm-dot:nth-child(1) { background: #FF5F57; }
+.crm-dot:nth-child(2) { background: #FEBC2E; }
+.crm-dot:nth-child(3) { background: #28C840; }
+
+.crm-url {
+  margin-left: 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: rgba(255,255,255,0.03);
+  padding: 6px 16px;
+  border-radius: 6px;
+  flex: 1;
+  text-align: center;
+}
+
+.crm-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: 380px;
+}
+
+.crm-sidebar {
+  background: rgba(0,0,0,0.2);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+}
+
+.crm-sidebar-item {
+  padding: 10px 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: default;
+  transition: all 0.2s;
+}
+
+.crm-sidebar-item:hover {
+  background: rgba(255,255,255,0.02);
+  color: var(--text-primary);
+}
+
+.crm-sidebar-item.active {
+  color: var(--accent);
+  background: var(--accent-dim);
+  border-right: 2px solid var(--accent);
+}
+
+.crm-content {
+  padding: 24px;
+}
+
+.crm-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.crm-content-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.crm-add-btn {
+  background: var(--accent);
+  color: #0A0A0B;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.crm-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.crm-table th {
+  text-align: left;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.crm-table td {
+  padding: 12px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.crm-table tr:hover td { color: var(--text-primary); }
+
+.crm-status {
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.crm-status.published {
+  background: rgba(40, 200, 64, 0.15);
+  color: #28C840;
+}
+
+.crm-status.draft {
+  background: rgba(255, 190, 46, 0.15);
+  color: #FEBC2E;
+}
+
+/* ===================== REVENUE SECTION ===================== */
+.revenue {
+  padding: 140px 48px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.revenue-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.revenue .section-desc {
+  margin: 0 auto 72px;
+}
+
+.revenue-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  text-align: left;
+}
+
+.revenue-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px 32px;
+  text-align: center;
+  transition: all 0.35s;
+}
+
+.revenue-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-4px);
+}
+
+.revenue-number {
+  font-family: var(--font-display);
+  font-size: 56px;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.revenue-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.revenue-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===================== HOW IT WORKS ===================== */
+.how-it-works {
+  padding: 140px 48px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-top: 64px;
+  position: relative;
+}
+
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 44px;
+  left: 60px;
+  right: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-dim), var(--accent), var(--accent-dim));
+}
+
+.step {
+  text-align: center;
+  position: relative;
+}
+
+.step-number {
+  width: 56px;
+  height: 56px;
+  background: var(--bg-primary);
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--accent);
+  margin: 0 auto 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.step h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.step p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ===================== PRICING ===================== */
+.pricing {
+  padding: 140px 48px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.pricing-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.pricing .section-desc {
+  margin: 0 auto 64px;
+}
+
+.pricing-toggle {
+  display: inline-flex;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 48px;
+}
+
+.toggle-btn {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-family: var(--font-body);
+}
+
+.toggle-btn.active {
+  background: var(--accent);
+  color: #0A0A0B;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  text-align: left;
+}
+
+.pricing-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px 32px;
+  position: relative;
+  transition: all 0.35s;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+}
+
+.pricing-card.featured {
+  border-color: var(--accent);
+  box-shadow: 0 0 60px var(--accent-dim);
+}
+
+.pricing-card.featured::before {
+  content: 'MOST POPULAR';
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #0A0A0B;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 16px;
+  border-radius: 100px;
+  letter-spacing: 1px;
+}
+
+.pricing-tier {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.pricing-price {
+  font-family: var(--font-display);
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.pricing-price .dollar { font-size: 32px; vertical-align: top; margin-right: 2px; }
+.pricing-period { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; }
+
+.pricing-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  line-height: 1.5;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.pricing-features {
+  list-style: none;
+  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pricing-features li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pricing-features li::before {
+  content: '✓';
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.pricing-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  transition: all 0.3s;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-body);
+}
+
+.pricing-btn.primary {
+  background: var(--accent);
+  color: #0A0A0B;
+}
+
+.pricing-btn.primary:hover {
+  box-shadow: 0 8px 32px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.pricing-btn.secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.pricing-btn.secondary:hover {
+  border-color: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.03);
+}
+
+/* ===================== TESTIMONIALS ===================== */
+.testimonials {
+  padding: 140px 48px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.testimonials .section-desc { margin-bottom: 64px; }
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.testimonial-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  transition: all 0.35s;
+}
+
+.testimonial-card:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-4px);
+}
+
+.testimonial-stars {
+  color: var(--accent);
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.testimonial-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.testimonial-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-dim), var(--bg-primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--accent);
+}
+
+.testimonial-name { font-size: 14px; font-weight: 700; }
+.testimonial-role { font-size: 12px; color: var(--text-muted); }
+
+/* ===================== FINAL CTA ===================== */
+.final-cta {
+  padding: 160px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.final-cta::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(ellipse, var(--accent-dim) 0%, transparent 70%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.final-cta h2 {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 1;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.final-cta p {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+  position: relative;
+}
+
+.final-cta .btn-primary { position: relative; }
+
+/* ===================== FOOTER ===================== */
+footer {
+  padding: 64px 48px 40px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-brand .nav-logo { margin-bottom: 16px; }
+
+.footer-brand p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.footer-col h4 {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+
+.footer-col a {
+  display: block;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 12px;
+  transition: color 0.2s;
+}
+
+.footer-col a:hover { color: var(--accent); }
+
+.footer-bottom {
+  max-width: 1240px;
+  margin: 48px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-bottom p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.footer-socials {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-socials a {
+  color: var(--text-muted);
+  font-size: 18px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-socials a:hover { color: var(--accent); }
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Scroll animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 1024px) {
+  .features-grid,
+  .revenue-grid,
+  .pricing-grid,
+  .testimonials-grid { grid-template-columns: 1fr 1fr; }
+
+  .crm-inner { grid-template-columns: 1fr; gap: 48px; }
+
+  .steps { grid-template-columns: 1fr 1fr; gap: 40px; }
+  .steps::before { display: none; }
+
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+
+  .hero { padding: 120px 20px 60px; }
+  .hero-phones { flex-direction: column; align-items: center; gap: 16px; }
+  .phone-mockup { width: 240px; height: 480px; }
+  .phone-mockup:nth-child(1),
+  .phone-mockup:nth-child(3) { display: none; }
+  .phone-mockup:nth-child(2) { transform: none; }
+
+  .features,
+  .crm-section,
+  .revenue,
+  .how-it-works,
+  .pricing,
+  .testimonials { padding: 80px 20px; }
+
+  .features-grid,
+  .revenue-grid,
+  .pricing-grid,
+  .testimonials-grid,
+  .steps { grid-template-columns: 1fr; }
+
+  .crm-body { grid-template-columns: 1fr; }
+  .crm-sidebar { display: none; }
+
+  .hero-actions { flex-direction: column; width: 100%; }
+  .btn-primary, .btn-secondary { width: 100%; text-align: center; justify-content: center; }
+
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; gap: 16px; }
+}
+
+/* ===================== MOBILE NAV ===================== */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn { display: block; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============== NAV ============== -->
+<nav>
+  <a href="#" class="nav-logo"><span class="dot"></span>FITLABEL</a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#crm">CRM</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+  </ul>
+  <a href="#pricing" class="nav-cta">Get Started</a>
+  <button class="mobile-menu-btn">☰</button>
+</nav>
+
+<!-- ============== HERO ============== -->
+<section class="hero">
+  <div class="hero-badge">Now in Early Access</div>
+  <h1>YOUR BRAND.<br><span class="accent">YOUR APP.</span></h1>
+  <p class="hero-sub">Launch your own branded fitness app in days, not months. Manage programs, workouts, and your community — all from one powerful dashboard.</p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-primary">Start Building →</a>
+    <a href="#features" class="btn-secondary">See How It Works</a>
+  </div>
+
+  <div class="hero-phones">
+    <!-- Phone 1: Programs -->
+    <div class="phone-mockup">
+      <div class="phone-notch"></div>
+      <div class="phone-screen screen-programs">
+        <div class="screen-header">PROGRAMS</div>
+        <div class="program-card">
+          <span class="tag">12 WEEKS</span>
+          <h4>Shred & Sculpt</h4>
+          <p>Full body transformation program</p>
+        </div>
+        <div class="program-card program-card-alt">
+          <span class="tag">8 WEEKS</span>
+          <h4>Strong Foundations</h4>
+          <p>Build strength from the ground up</p>
+        </div>
+        <div class="program-card">
+          <span class="tag">4 WEEKS</span>
+          <h4>30-Day Abs</h4>
+          <p>Targeted core challenge</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone 2: Workout -->
+    <div class="phone-mockup">
+      <div class="phone-notch"></div>
+      <div class="phone-screen screen-workout">
+        <div class="workout-title">UPPER BODY PUSH</div>
+        <div class="workout-meta">Day 3 · Week 2 · 45 min</div>
+        <div class="exercise-item">
+          <div class="exercise-thumb">🏋️</div>
+          <div class="exercise-info">
+            <h5>Bench Press</h5>
+            <span>4 × 8-10 · 90s rest</span>
+          </div>
+          <div class="exercise-check done"></div>
+        </div>
+        <div class="exercise-item">
+          <div class="exercise-thumb">💪</div>
+          <div class="exercise-info">
+            <h5>OHP Dumbbell</h5>
+            <span>3 × 12 · 60s rest</span>
+          </div>
+          <div class="exercise-check done"></div>
+        </div>
+        <div class="exercise-item">
+          <div class="exercise-thumb">🔥</div>
+          <div class="exercise-info">
+            <h5>Cable Fly</h5>
+            <span>3 × 15 · 45s rest</span>
+          </div>
+          <div class="exercise-check"></div>
+        </div>
+        <div class="exercise-item">
+          <div class="exercise-thumb">⚡</div>
+          <div class="exercise-info">
+            <h5>Tricep Pushdown</h5>
+            <span>3 × 12-15 · 45s rest</span>
+          </div>
+          <div class="exercise-check"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone 3: Progress -->
+    <div class="phone-mockup">
+      <div class="phone-notch"></div>
+      <div class="phone-screen screen-progress">
+        <div class="screen-header">YOUR PROGRESS</div>
+        <div class="stat-grid">
+          <div class="stat-box">
+            <div class="number">47</div>
+            <div class="label">Workouts</div>
+          </div>
+          <div class="stat-box">
+            <div class="number">12</div>
+            <div class="label">Day Streak</div>
+          </div>
+          <div class="stat-box">
+            <div class="number">38h</div>
+            <div class="label">Total Time</div>
+          </div>
+          <div class="stat-box">
+            <div class="number">89%</div>
+            <div class="label">Completion</div>
+          </div>
+        </div>
+        <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--text-secondary);">THIS WEEK</div>
+        <div class="streak-bar">
+          <div class="day active">M</div>
+          <div class="day active">T</div>
+          <div class="day active">W</div>
+          <div class="day current">T</div>
+          <div class="day">F</div>
+          <div class="day">S</div>
+          <div class="day">S</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== TRUSTED BY ============== -->
+<div class="logos-bar reveal">
+  <p>Trusted by fitness creators worldwide</p>
+  <div class="logo-row">
+    <span>IRONFIT</span>
+    <span>FLEXZONE</span>
+    <span>BODYLABS</span>
+    <span>PEAKFORM</span>
+    <span>TRAINR</span>
+  </div>
+</div>
+
+<!-- ============== FEATURES ============== -->
+<section class="features reveal" id="features">
+  <div class="section-label">The App Experience</div>
+  <div class="section-title">EVERYTHING YOUR<br>AUDIENCE NEEDS</div>
+  <p class="section-desc">Your subscribers get a premium fitness app with your name on it. Programs, workouts, video demos, progress tracking — the full experience.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>Structured Programs</h3>
+      <p>Multi-week programs with daily workouts. Your users follow a clear path from week 1 to completion.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎬</div>
+      <h3>Video Demos</h3>
+      <p>HD exercise videos streamed globally via CDN. Every exercise has a visual guide so your users never feel lost.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Progress Tracking</h3>
+      <p>Workout logs, streaks, and stats that keep your users coming back. They see real progress, you see retention.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <h3>Push Notifications</h3>
+      <p>Remind users about their next workout, announce new programs, or send motivational nudges — all from your dashboard.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <h3>Your Brand, Everywhere</h3>
+      <p>Your logo, your colors, your name in the App Store. Every touchpoint screams your brand, not ours.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💳</div>
+      <h3>Built-In Monetization</h3>
+      <p>Sell subscriptions and premium programs directly in the app. Stripe-powered payments go straight to your account.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== CRM SECTION ============== -->
+<section class="crm-section reveal" id="crm">
+  <div class="crm-inner">
+    <div class="crm-text">
+      <div class="section-label">The CRM Panel</div>
+      <div class="section-title">MANAGE EVERYTHING.<br>BUILD NOTHING.</div>
+      <p class="section-desc">Your content management dashboard lets you create, organize, and publish — no developer needed. Upload a workout in the morning, your users have it by lunch.</p>
+
+      <div class="crm-features-list">
+        <div class="crm-feature-item">
+          <div class="crm-feature-icon">⚡</div>
+          <div>
+            <h4>Drag & Drop Programs</h4>
+            <p>Build multi-week programs visually. Assign workouts to days, reorder weeks, set difficulty.</p>
+          </div>
+        </div>
+        <div class="crm-feature-item">
+          <div class="crm-feature-icon">🎥</div>
+          <div>
+            <h4>Media Library</h4>
+            <p>Upload videos and images once, reuse everywhere. Auto-transcoding and CDN delivery included.</p>
+          </div>
+        </div>
+        <div class="crm-feature-item">
+          <div class="crm-feature-icon">👥</div>
+          <div>
+            <h4>User Management</h4>
+            <p>See your subscribers, their progress, subscription status. Send targeted notifications.</p>
+          </div>
+        </div>
+        <div class="crm-feature-item">
+          <div class="crm-feature-icon">📈</div>
+          <div>
+            <h4>Analytics Dashboard</h4>
+            <p>Track subscriber growth, revenue, most popular programs, and engagement metrics at a glance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="crm-mockup">
+      <div class="crm-toolbar">
+        <div class="crm-dot"></div>
+        <div class="crm-dot"></div>
+        <div class="crm-dot"></div>
+        <div class="crm-url">admin.fitlabel.com</div>
+      </div>
+      <div class="crm-body">
+        <div class="crm-sidebar">
+          <div class="crm-sidebar-item">📊 Dashboard</div>
+          <div class="crm-sidebar-item active">📋 Programs</div>
+          <div class="crm-sidebar-item">🏋️ Workouts</div>
+          <div class="crm-sidebar-item">💪 Exercises</div>
+          <div class="crm-sidebar-item">🎥 Media</div>
+          <div class="crm-sidebar-item">👥 Users</div>
+          <div class="crm-sidebar-item">💰 Revenue</div>
+          <div class="crm-sidebar-item">⚙️ Settings</div>
+        </div>
+        <div class="crm-content">
+          <div class="crm-content-header">
+            <h3>Programs</h3>
+            <button class="crm-add-btn">+ Add Program</button>
+          </div>
+          <table class="crm-table">
+            <thead>
+              <tr>
+                <th>Program</th>
+                <th>Duration</th>
+                <th>Enrolled</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="color: var(--text-primary); font-weight: 600;">Shred & Sculpt</td>
+                <td>12 weeks</td>
+                <td>1,247</td>
+                <td><span class="crm-status published">Published</span></td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-primary); font-weight: 600;">Strong Foundations</td>
+                <td>8 weeks</td>
+                <td>843</td>
+                <td><span class="crm-status published">Published</span></td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-primary); font-weight: 600;">Summer Shred 2025</td>
+                <td>6 weeks</td>
+                <td>—</td>
+                <td><span class="crm-status draft">Draft</span></td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-primary); font-weight: 600;">30-Day Abs Challenge</td>
+                <td>4 weeks</td>
+                <td>2,108</td>
+                <td><span class="crm-status published">Published</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== REVENUE ============== -->
+<section class="revenue reveal">
+  <div class="revenue-inner">
+    <div class="section-label">The Business</div>
+    <div class="section-title">TURN FOLLOWERS<br>INTO REVENUE</div>
+    <p class="section-desc">Your own app is the most powerful monetization tool in fitness. Own your audience, own your revenue stream.</p>
+
+    <div class="revenue-grid">
+      <div class="revenue-card">
+        <div class="revenue-number">10×</div>
+        <h3>Higher LTV</h3>
+        <p>App subscribers stay 10× longer than PDF or social media customers. Retention is where the real money lives.</p>
+      </div>
+      <div class="revenue-card">
+        <div class="revenue-number">100%</div>
+        <h3>Your Revenue</h3>
+        <p>No revenue share with FitLabel. Stripe deposits go straight to your bank account — you keep what you earn.</p>
+      </div>
+      <div class="revenue-card">
+        <div class="revenue-number">0</div>
+        <h3>Code Required</h3>
+        <p>No hiring developers. No managing servers. Upload your content, set your prices, and launch. We handle the tech.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== HOW IT WORKS ============== -->
+<section class="how-it-works reveal">
+  <div class="section-label">How It Works</div>
+  <div class="section-title">LIVE IN 4 STEPS</div>
+  <p class="section-desc">From sign-up to App Store in the fastest timeline in the industry.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-number">1</div>
+      <h3>Sign Up</h3>
+      <p>Create your account and set up your brand — logo, colors, app name.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <h3>Add Content</h3>
+      <p>Upload exercises, build workouts, create programs in the CRM dashboard.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <h3>Set Pricing</h3>
+      <p>Connect Stripe, configure subscription tiers, decide what's free vs. premium.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">4</div>
+      <h3>Launch</h3>
+      <p>Your branded app goes live on the App Store and Play Store. Start earning.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PRICING ============== -->
+<section class="pricing reveal" id="pricing">
+  <div class="pricing-inner">
+    <div class="section-label">Pricing</div>
+    <div class="section-title">SIMPLE, TRANSPARENT<br>PRICING</div>
+    <p class="section-desc">No hidden fees. No revenue share. Pick the plan that matches your ambition.</p>
+
+    <div class="pricing-toggle">
+      <button class="toggle-btn active" onclick="togglePricing('monthly')">Monthly</button>
+      <button class="toggle-btn" onclick="togglePricing('annual')">Annual (Save 17%)</button>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- Starter -->
+      <div class="pricing-card">
+        <div class="pricing-tier">Starter</div>
+        <div class="pricing-price"><span class="dollar">$</span><span class="amount">99</span></div>
+        <div class="pricing-period">per month</div>
+        <p class="pricing-desc">For creators ready to launch their first app and start building a subscriber base.</p>
+        <ul class="pricing-features">
+          <li>Branded mobile app (runtime)</li>
+          <li>CRM dashboard access</li>
+          <li>Up to 50 published videos</li>
+          <li>Up to 500 end users</li>
+          <li>Email support</li>
+        </ul>
+        <button class="pricing-btn secondary">Get Started</button>
+      </div>
+
+      <!-- Pro -->
+      <div class="pricing-card featured">
+        <div class="pricing-tier">Pro</div>
+        <div class="pricing-price"><span class="dollar">$</span><span class="amount">249</span></div>
+        <div class="pricing-period">per month</div>
+        <p class="pricing-desc">For established creators who want their own App Store listing and full monetization.</p>
+        <ul class="pricing-features">
+          <li>Dedicated App Store & Play Store listing</li>
+          <li>Unlimited video content</li>
+          <li>Up to 5,000 end users</li>
+          <li>Stripe integration & subscriptions</li>
+          <li>Push notifications</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="pricing-btn primary">Get Started</button>
+      </div>
+
+      <!-- Business -->
+      <div class="pricing-card">
+        <div class="pricing-tier">Business</div>
+        <div class="pricing-price"><span class="dollar">$</span><span class="amount">499</span></div>
+        <div class="pricing-period">per month</div>
+        <p class="pricing-desc">For large creators and fitness brands scaling their digital empire.</p>
+        <ul class="pricing-features">
+          <li>Everything in Pro</li>
+          <li>Unlimited end users</li>
+          <li>Analytics dashboard</li>
+          <li>Dedicated onboarding session</li>
+          <li>Nutrition / meal plan module</li>
+          <li>Custom integrations</li>
+        </ul>
+        <button class="pricing-btn secondary">Contact Sales</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== TESTIMONIALS ============== -->
+<section class="testimonials reveal" id="testimonials">
+  <div class="section-label">Testimonials</div>
+  <div class="section-title">CREATORS LOVE<br>FITLABEL</div>
+  <p class="section-desc">Don't take our word for it — hear from the influencers already building their empires.</p>
+
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"I went from selling PDFs on Instagram to having my own app in the App Store. My subscribers tripled in the first two months. FitLabel made it ridiculously easy."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">JM</div>
+        <div>
+          <div class="testimonial-name">Jessica Martinez</div>
+          <div class="testimonial-role">Fitness Coach · 280K followers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"The CRM is insane. I upload a new program in the morning and my users have it immediately. No code, no waiting for developers. Just upload and publish."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">MT</div>
+        <div>
+          <div class="testimonial-name">Marcus Thompson</div>
+          <div class="testimonial-role">Strength Coach · 145K followers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Having my own branded app changed everything. My clients take me more seriously, engagement is through the roof, and the subscription revenue is consistent every month."</p>
+      <div class="testimonial-author">
+        <div class="testimonial-avatar">SK</div>
+        <div>
+          <div class="testimonial-name">Sarah Kim</div>
+          <div class="testimonial-role">Yoga Instructor · 520K followers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FINAL CTA ============== -->
+<section class="final-cta">
+  <h2>READY TO BUILD<br><span style="color: var(--accent);">YOUR EMPIRE?</span></h2>
+  <p>Join hundreds of fitness creators who've already launched their own branded app. Your audience is waiting.</p>
+  <a href="#pricing" class="btn-primary">Get Started Today →</a>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo"><span class="dot"></span>FITLABEL</a>
+      <p>The white-label fitness app platform. Your brand, your app, your rules.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#features">Features</a>
+      <a href="#crm">CRM Panel</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#">Changelog</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="#">Documentation</a>
+      <a href="#">API Reference</a>
+      <a href="#">Blog</a>
+      <a href="#">Help Center</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About</a>
+      <a href="#">Careers</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 FitLabel. All rights reserved.</p>
+    <div class="footer-socials">
+      <a href="#">𝕏</a>
+      <a href="#">in</a>
+      <a href="#">ig</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+reveals.forEach(el => observer.observe(el));
+
+// Pricing toggle
+function togglePricing(type) {
+  const btns = document.querySelectorAll('.toggle-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const amounts = document.querySelectorAll('.pricing-price .amount');
+  const periods = document.querySelectorAll('.pricing-period');
+
+  if (type === 'annual') {
+    amounts[0].textContent = '83';
+    amounts[1].textContent = '207';
+    amounts[2].textContent = '415';
+    periods.forEach(p => p.textContent = 'per month, billed annually');
+  } else {
+    amounts[0].textContent = '99';
+    amounts[1].textContent = '249';
+    amounts[2].textContent = '499';
+    periods.forEach(p => p.textContent = 'per month');
+  }
+}
+
+// Smooth nav background on scroll
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if (window.scrollY > 50) {
+    nav.style.borderBottomColor = 'rgba(255,255,255,0.08)';
+  } else {
+    nav.style.borderBottomColor = 'rgba(255,255,255,0.03)';
+  }
+});
+</script>
+
+</body>
+</html>

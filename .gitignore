@@ -25,9 +25,13 @@ db.sqlite3-journal
 # IDE
 .vscode/
 .idea/
+.cursor/
 *.swp
 *.swo
 *~
+
+# Task runners
+tasks/
 
 # OS
 .DS_Store
