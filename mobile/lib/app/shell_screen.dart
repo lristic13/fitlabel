@@ -33,6 +33,11 @@ class ShellScreen extends StatelessWidget {
               label: 'Workouts',
             ),
             NavigationDestination(
+              icon: Icon(Icons.article_outlined),
+              selectedIcon: Icon(Icons.article),
+              label: 'Posts',
+            ),
+            NavigationDestination(
               icon: Icon(Icons.person_outlined),
               selectedIcon: Icon(Icons.person),
               label: 'Profile',
@@ -46,7 +51,8 @@ class ShellScreen extends StatelessWidget {
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
     if (location.startsWith('/workouts')) return 1;
-    if (location.startsWith('/profile')) return 2;
+    if (location.startsWith('/posts')) return 2;
+    if (location.startsWith('/profile')) return 3;
     return 0;
   }
 
@@ -57,6 +63,8 @@ class ShellScreen extends StatelessWidget {
       case 1:
         context.go('/workouts');
       case 2:
+        context.go('/posts');
+      case 3:
         context.go('/profile');
     }
   }
