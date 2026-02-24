@@ -8,6 +8,7 @@ import 'package:fitlabel/features/auth/presentation/widgets/auth_error_banner.da
 import 'package:fitlabel/features/auth/presentation/widgets/auth_submit_button.dart';
 import 'package:fitlabel/features/auth/presentation/widgets/auth_switch_link.dart';
 import 'package:fitlabel/features/auth/presentation/widgets/auth_text_field.dart';
+import 'package:fitlabel/shared/widgets/tenant_logo.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -62,11 +63,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const Center(child: TenantLogo(size: 64)),
+                  const SizedBox(height: 24),
                   Text(
                     'Welcome back',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: Theme.of(context).textTheme.headlineLarge,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
@@ -77,7 +78,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 40),
                   if (error != null) ...[
                     AuthErrorBanner(message: error),
                     const SizedBox(height: 16),
@@ -97,7 +98,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   AuthTextField(
                     controller: _passwordController,
                     label: 'Password',
@@ -120,7 +121,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 32),
                   AuthSubmitButton(
                     label: 'Sign In',
                     isLoading: isLoading,

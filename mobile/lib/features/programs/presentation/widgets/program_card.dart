@@ -25,19 +25,19 @@ class ProgramCard extends StatelessWidget {
           children: [
             ProgramCardImage(coverImage: program.coverImage),
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     program.title,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   ProgramCardMeta(program: program),
                 ],
               ),
@@ -59,7 +59,7 @@ class ProgramCardImage extends StatelessWidget {
     if (coverImage?.file != null) {
       return Image.network(
         coverImage.file as String,
-        height: 160,
+        height: 180,
         width: double.infinity,
         fit: BoxFit.cover,
         errorBuilder: (_, _, _) => const ProgramCardImagePlaceholder(),
@@ -74,13 +74,24 @@ class ProgramCardImagePlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primary = Theme.of(context).colorScheme.primary;
+
     return Container(
-      height: 160,
-      color: Theme.of(context).colorScheme.primaryContainer,
-      child: Icon(
+      height: 180,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            primary.withValues(alpha: 0.8),
+            primary.withValues(alpha: 0.4),
+          ],
+        ),
+      ),
+      child: const Icon(
         Icons.fitness_center,
         size: 48,
-        color: Theme.of(context).colorScheme.onPrimaryContainer,
+        color: Colors.white54,
       ),
     );
   }
@@ -112,10 +123,10 @@ class ProgramCardMeta extends StatelessWidget {
         const Spacer(),
         if (!program.isFree)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: ShapeDecoration(
               color: theme.colorScheme.tertiary,
-              borderRadius: BorderRadius.circular(4),
+              shape: const StadiumBorder(),
             ),
             child: Text(
               'PREMIUM',

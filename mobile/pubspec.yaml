@@ -25,6 +25,9 @@ dependencies:
   # Storage
   flutter_secure_storage: ^9.2.4
 
+  # Typography
+  google_fonts: ^6.2.1
+
   # Utils
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0

@@ -9,6 +9,7 @@ import 'package:fitlabel/features/auth/presentation/widgets/auth_error_banner.da
 import 'package:fitlabel/features/auth/presentation/widgets/auth_submit_button.dart';
 import 'package:fitlabel/features/auth/presentation/widgets/auth_switch_link.dart';
 import 'package:fitlabel/features/auth/presentation/widgets/auth_text_field.dart';
+import 'package:fitlabel/shared/widgets/tenant_logo.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -66,11 +67,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const Center(child: TenantLogo(size: 64)),
+                  const SizedBox(height: 24),
                   Text(
                     'Create account',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: Theme.of(context).textTheme.headlineLarge,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
@@ -81,7 +82,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         ),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 40),
                   if (error != null) ...[
                     AuthErrorBanner(message: error),
                     const SizedBox(height: 16),
@@ -101,7 +102,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   AuthTextField(
                     controller: _passwordController,
                     label: 'Password',
@@ -127,7 +128,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
                   AuthTextField(
                     controller: _confirmPasswordController,
                     label: 'Confirm Password',
@@ -153,7 +154,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 32),
                   AuthSubmitButton(
                     label: 'Create Account',
                     isLoading: isLoading,

@@ -31,7 +31,7 @@ class ExerciseCard extends StatelessWidget {
           ? theme.colorScheme.tertiaryContainer.withValues(alpha: 0.3)
           : null,
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -173,11 +173,11 @@ class ExerciseCardThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     if (demoImage?.thumbnail != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         child: Image.network(
           demoImage.thumbnail as String,
-          width: 64,
-          height: 64,
+          width: 72,
+          height: 72,
           fit: BoxFit.cover,
           errorBuilder: (_, _, _) =>
               const ExerciseCardThumbnailPlaceholder(),
@@ -195,11 +195,11 @@ class ExerciseCardThumbnailPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 64,
-      height: 64,
+      width: 72,
+      height: 72,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Icon(
         Icons.fitness_center,
@@ -297,14 +297,14 @@ class ExerciseCardMuscleGroups extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Wrap(
-      spacing: 4,
-      runSpacing: 4,
+      spacing: 6,
+      runSpacing: 6,
       children: muscleGroups.map((group) {
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          decoration: ShapeDecoration(
             color: theme.colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(4),
+            shape: const StadiumBorder(),
           ),
           child: Text(
             group,

@@ -6,6 +6,7 @@ import 'package:fitlabel/features/programs/presentation/providers/programs_provi
 import 'package:fitlabel/features/programs/presentation/widgets/program_card.dart';
 import 'package:fitlabel/features/programs/presentation/widgets/programs_empty_view.dart';
 import 'package:fitlabel/features/programs/presentation/widgets/programs_error_view.dart';
+import 'package:fitlabel/shared/widgets/tenant_logo.dart';
 
 class ProgramsScreen extends ConsumerWidget {
   const ProgramsScreen({super.key});
@@ -15,7 +16,20 @@ class ProgramsScreen extends ConsumerWidget {
     final programsState = ref.watch(programsListProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Programs')),
+      appBar: AppBar(
+        title: Text(
+          'Programs',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: TenantLogo(size: 32),
+          ),
+        ],
+      ),
       body: programsState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => ProgramsErrorView(
@@ -28,9 +42,9 @@ class ProgramsScreen extends ConsumerWidget {
           return RefreshIndicator(
             onRefresh: () async => ref.invalidate(programsListProvider),
             child: ListView.separated(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               itemCount: programs.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 16),
               itemBuilder: (context, index) {
                 final program = programs[index];
                 return ProgramCard(

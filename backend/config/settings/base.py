@@ -176,6 +176,9 @@ CACHES = {
 # Unfold Admin
 # ---------------------------------------------------------------------------
 UNFOLD = {
-    "SITE_TITLE": "FitLabel Admin",
-    "SITE_HEADER": "FitLabel",
+    "SITE_TITLE": "apps.tenants.admin_theme.get_site_title",
+    "SITE_HEADER": "apps.tenants.admin_theme.get_site_header",
+    "COLORS": {
+        "primary": "apps.tenants.admin_theme.get_primary_colors",
+    },
 }

@@ -20,7 +20,7 @@ class ProgramWeekCard extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -65,7 +65,7 @@ class ProgramDayTile extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: CircleAvatar(
-        radius: 16,
+        radius: 18,
         backgroundColor: isCompleted
             ? theme.colorScheme.tertiary
             : isRest
