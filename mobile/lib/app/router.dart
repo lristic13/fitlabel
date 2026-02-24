@@ -12,6 +12,8 @@ import 'package:fitlabel/features/programs/presentation/screens/programs_screen.
 import 'package:fitlabel/features/programs/presentation/screens/program_detail_screen.dart';
 import 'package:fitlabel/features/workouts/presentation/screens/workouts_screen.dart';
 import 'package:fitlabel/features/workouts/presentation/screens/workout_detail_screen.dart';
+import 'package:fitlabel/features/posts/presentation/screens/posts_screen.dart';
+import 'package:fitlabel/features/posts/presentation/screens/post_detail_screen.dart';
 import 'package:fitlabel/features/profile/presentation/screens/profile_screen.dart';
 
 part 'router.g.dart';
@@ -72,6 +74,19 @@ GoRouter router(Ref ref) {
                 builder: (context, state) => WorkoutDetailScreen(
                   workoutId: state.pathParameters['id']!,
                   programDayId: state.uri.queryParameters['programDayId'],
+                ),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/posts',
+            builder: (context, state) => const PostsScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                parentNavigatorKey: _rootNavigatorKey,
+                builder: (context, state) => PostDetailScreen(
+                  postId: state.pathParameters['id']!,
                 ),
               ),
             ],

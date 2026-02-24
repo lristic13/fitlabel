@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:fitlabel/features/workouts/presentation/providers/workouts_provider.dart';
 import 'package:fitlabel/features/workouts/presentation/widgets/workout_card.dart';
+import 'package:fitlabel/shared/widgets/tenant_logo.dart';
 
 class WorkoutsScreen extends ConsumerStatefulWidget {
   const WorkoutsScreen({super.key});
@@ -60,7 +61,20 @@ class _WorkoutsScreenState extends ConsumerState<WorkoutsScreen> {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Workouts')),
+      appBar: AppBar(
+        title: Text(
+          'Workouts',
+          style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+        ),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 12),
+            child: TenantLogo(size: 32),
+          ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
           ref.invalidate(workoutsListProvider);
@@ -86,21 +100,16 @@ class _WorkoutsScreenState extends ConsumerState<WorkoutsScreen> {
                         )
                       : null,
                   isDense: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
                 ),
               ),
             ),
 
             // Category pills
             muscleGroupsState.when(
-              loading: () => const SizedBox(height: 48),
+              loading: () => const SizedBox(height: 56),
               error: (_, _) => const SizedBox.shrink(),
               data: (groups) => SizedBox(
-                height: 48,
+                height: 56,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -113,13 +122,6 @@ class _WorkoutsScreenState extends ConsumerState<WorkoutsScreen> {
                         label: const Text('All'),
                         selected: isAllSelected,
                         onSelected: (_) => _onAllTapped(),
-                        showCheckmark: false,
-                        selectedColor: theme.colorScheme.primary,
-                        labelStyle: TextStyle(
-                          color: isAllSelected
-                              ? theme.colorScheme.onPrimary
-                              : theme.colorScheme.onSurfaceVariant,
-                        ),
                       );
                     }
                     final group = groups[index - 1];
@@ -129,13 +131,6 @@ class _WorkoutsScreenState extends ConsumerState<WorkoutsScreen> {
                       label: Text(group.label),
                       selected: isSelected,
                       onSelected: (_) => _onGroupToggled(group.value),
-                      showCheckmark: false,
-                      selectedColor: theme.colorScheme.primary,
-                      labelStyle: TextStyle(
-                        color: isSelected
-                            ? theme.colorScheme.onPrimary
-                            : theme.colorScheme.onSurfaceVariant,
-                      ),
                     );
                   },
                 ),

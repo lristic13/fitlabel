@@ -89,8 +89,8 @@ class _ExerciseSetRowState extends State<ExerciseSetRow> {
           ),
           const SizedBox(width: 8),
           SizedBox(
-            width: 56,
-            height: 36,
+            width: 60,
+            height: 38,
             child: TextField(
               controller: _repsController,
               enabled: !isCompleted,
@@ -108,16 +108,20 @@ class _ExerciseSetRowState extends State<ExerciseSetRow> {
                 contentPadding: const EdgeInsets.symmetric(
                     horizontal: 8, vertical: 8),
                 isDense: true,
-                border: const OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
                 enabledBorder: _repsError
                     ? OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: theme.colorScheme.error),
                       )
                     : null,
-                filled: isCompleted,
+                filled: true,
                 fillColor: isCompleted
                     ? theme.colorScheme.surfaceContainerHighest
-                    : null,
+                    : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
               ),
             ),
           ),
@@ -129,8 +133,8 @@ class _ExerciseSetRowState extends State<ExerciseSetRow> {
                 )),
           ),
           SizedBox(
-            width: 64,
-            height: 36,
+            width: 68,
+            height: 38,
             child: TextField(
               controller: _weightController,
               enabled: !isCompleted,
@@ -149,18 +153,21 @@ class _ExerciseSetRowState extends State<ExerciseSetRow> {
                 contentPadding: const EdgeInsets.symmetric(
                     horizontal: 8, vertical: 8),
                 isDense: true,
-                border: const OutlineInputBorder(),
-                filled: isCompleted,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
                 fillColor: isCompleted
                     ? theme.colorScheme.surfaceContainerHighest
-                    : null,
+                    : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
               ),
             ),
           ),
           const SizedBox(width: 8),
           SizedBox(
-            width: 36,
-            height: 36,
+            width: 38,
+            height: 38,
             child: IconButton.filled(
               onPressed: isCompleted
                   ? widget.onUncomplete

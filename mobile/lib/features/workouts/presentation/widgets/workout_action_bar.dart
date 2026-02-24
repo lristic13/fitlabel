@@ -19,16 +19,16 @@ class WorkoutStartBar extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: SizedBox(
           width: double.infinity,
-          height: 48,
+          height: 56,
           child: FilledButton.icon(
             onPressed: isLoading ? null : onStart,
             icon: isLoading
-                ? const SizedBox(
+                ? SizedBox(
                     width: 20,
                     height: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   )
                 : const Icon(Icons.play_arrow),
@@ -196,7 +196,7 @@ class WorkoutCompletedBar extends StatelessWidget {
             const SizedBox(height: 8),
             SizedBox(
               width: double.infinity,
-              height: 48,
+              height: 56,
               child: FilledButton(
                 onPressed: onDone,
                 child: const Text('Done'),

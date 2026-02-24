@@ -17,11 +17,11 @@ class WorkoutCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               WorkoutCardThumbnail(coverImage: workout.coverImage),
-              const SizedBox(width: 12),
+              const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +37,7 @@ class WorkoutCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right),
+              Icon(Icons.chevron_right, color: theme.colorScheme.primary),
             ],
           ),
         ),
@@ -55,11 +55,11 @@ class WorkoutCardThumbnail extends StatelessWidget {
   Widget build(BuildContext context) {
     if (coverImage?.thumbnail != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         child: Image.network(
           coverImage.thumbnail as String,
-          width: 56,
-          height: 56,
+          width: 64,
+          height: 64,
           fit: BoxFit.cover,
           errorBuilder: (_, _, _) =>
               const WorkoutCardThumbnailPlaceholder(),
@@ -76,11 +76,11 @@ class WorkoutCardThumbnailPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 56,
-      height: 56,
+      width: 64,
+      height: 64,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Icon(
         Icons.fitness_center,

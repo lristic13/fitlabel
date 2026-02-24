@@ -179,11 +179,11 @@ class WorkoutDetailBody extends ConsumerWidget {
         const SizedBox(height: 16),
         Text(
           'Exercises',
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         ...List.generate(
           workout.exerciseEntries.length,
           (index) {
@@ -191,7 +191,7 @@ class WorkoutDetailBody extends ConsumerWidget {
             final exerciseLog = session?.exerciseLogs[entry.exercise.id];
 
             return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: 12),
               child: ExerciseCard(
                 entry: entry,
                 index: index,

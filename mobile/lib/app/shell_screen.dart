@@ -10,23 +10,40 @@ class ShellScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex(context),
-        onDestinationSelected: (index) => _onTap(context, index),
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.calendar_today),
-            label: 'Programs',
+      bottomNavigationBar: DecoratedBox(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.3),
+            ),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.fitness_center),
-            label: 'Workouts',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        ),
+        child: NavigationBar(
+          selectedIndex: _currentIndex(context),
+          onDestinationSelected: (index) => _onTap(context, index),
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.calendar_today_outlined),
+              selectedIcon: Icon(Icons.calendar_today),
+              label: 'Programs',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.fitness_center_outlined),
+              selectedIcon: Icon(Icons.fitness_center),
+              label: 'Workouts',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.article_outlined),
+              selectedIcon: Icon(Icons.article),
+              label: 'Posts',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.person_outlined),
+              selectedIcon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -34,7 +51,8 @@ class ShellScreen extends StatelessWidget {
   int _currentIndex(BuildContext context) {
     final location = GoRouterState.of(context).matchedLocation;
     if (location.startsWith('/workouts')) return 1;
-    if (location.startsWith('/profile')) return 2;
+    if (location.startsWith('/posts')) return 2;
+    if (location.startsWith('/profile')) return 3;
     return 0;
   }
 
@@ -45,6 +63,8 @@ class ShellScreen extends StatelessWidget {
       case 1:
         context.go('/workouts');
       case 2:
+        context.go('/posts');
+      case 3:
         context.go('/profile');
     }
   }

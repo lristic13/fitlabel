@@ -17,7 +17,9 @@ class FitLabelApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: tenantConfig?.appName ?? 'FitLabel',
-      theme: AppTheme.fromConfig(tenantConfig),
+      theme: AppTheme.lightTheme(tenantConfig),
+      darkTheme: AppTheme.darkTheme(tenantConfig),
+      themeMode: ThemeMode.system,
       routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
     );

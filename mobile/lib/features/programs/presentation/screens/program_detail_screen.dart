@@ -73,7 +73,7 @@ class ProgramDetailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       children: [
         ProgramHeader(program: program),
         const SizedBox(height: 16),

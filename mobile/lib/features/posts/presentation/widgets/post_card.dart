@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-import 'package:fitlabel/features/programs/domain/models/program.dart';
+import 'package:fitlabel/features/posts/domain/models/post.dart';
 
-class ProgramCard extends StatelessWidget {
-  final Program program;
+class PostCard extends StatelessWidget {
+  final Post post;
   final VoidCallback onTap;
 
-  const ProgramCard({
+  const PostCard({
     super.key,
-    required this.program,
+    required this.post,
     required this.onTap,
   });
 
@@ -23,14 +24,14 @@ class ProgramCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ProgramCardImage(coverImage: program.coverImage),
+            _PostCardImage(coverImage: post.coverImage),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    program.title,
+                    post.title,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -38,7 +39,7 @@ class ProgramCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 10),
-                  ProgramCardMeta(program: program),
+                  _PostCardMeta(post: post),
                 ],
               ),
             ),
@@ -49,10 +50,10 @@ class ProgramCard extends StatelessWidget {
   }
 }
 
-class ProgramCardImage extends StatelessWidget {
+class _PostCardImage extends StatelessWidget {
   final dynamic coverImage;
 
-  const ProgramCardImage({super.key, required this.coverImage});
+  const _PostCardImage({required this.coverImage});
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +63,15 @@ class ProgramCardImage extends StatelessWidget {
         height: 180,
         width: double.infinity,
         fit: BoxFit.cover,
-        errorBuilder: (_, _, _) => const ProgramCardImagePlaceholder(),
+        errorBuilder: (_, _, _) => const _PostCardImagePlaceholder(),
       );
     }
-    return const ProgramCardImagePlaceholder();
+    return const _PostCardImagePlaceholder();
   }
 }
 
-class ProgramCardImagePlaceholder extends StatelessWidget {
-  const ProgramCardImagePlaceholder({super.key});
+class _PostCardImagePlaceholder extends StatelessWidget {
+  const _PostCardImagePlaceholder();
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +90,7 @@ class ProgramCardImagePlaceholder extends StatelessWidget {
         ),
       ),
       child: const Icon(
-        Icons.fitness_center,
+        Icons.article,
         size: 48,
         color: Colors.white54,
       ),
@@ -97,10 +98,10 @@ class ProgramCardImagePlaceholder extends StatelessWidget {
   }
 }
 
-class ProgramCardMeta extends StatelessWidget {
-  final Program program;
+class _PostCardMeta extends StatelessWidget {
+  final Post post;
 
-  const ProgramCardMeta({super.key, required this.program});
+  const _PostCardMeta({required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -111,17 +112,17 @@ class ProgramCardMeta extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(Icons.signal_cellular_alt,
-            size: 14, color: theme.colorScheme.onSurfaceVariant),
-        const SizedBox(width: 4),
-        Text(program.difficulty, style: metaStyle),
-        const SizedBox(width: 12),
-        Icon(Icons.calendar_today,
-            size: 14, color: theme.colorScheme.onSurfaceVariant),
-        const SizedBox(width: 4),
-        Text('${program.durationWeeks} weeks', style: metaStyle),
+        if (post.publishedAt != null) ...[
+          Icon(Icons.schedule,
+              size: 14, color: theme.colorScheme.onSurfaceVariant),
+          const SizedBox(width: 4),
+          Text(
+            DateFormat.yMMMd().format(post.publishedAt!),
+            style: metaStyle,
+          ),
+        ],
         const Spacer(),
-        if (!program.isFree)
+        if (!post.isFree)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: ShapeDecoration(
