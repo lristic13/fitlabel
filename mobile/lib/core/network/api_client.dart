@@ -71,6 +71,27 @@ class ApiClient {
     }
   }
 
+  /// Fetch a cursor-paginated endpoint, returning the full response
+  /// with `next`, `previous`, and `results` keys.
+  Future<Map<String, dynamic>> getPaginated(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    String? fullUrl,
+  }) async {
+    try {
+      final Response response;
+      if (fullUrl != null) {
+        response = await dio.getUri(Uri.parse(fullUrl));
+      } else {
+        response =
+            await dio.get(path, queryParameters: queryParameters);
+      }
+      return response.data as Map<String, dynamic>;
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   Future<Map<String, dynamic>> post(
     String path, {
     Map<String, dynamic>? data,
