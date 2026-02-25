@@ -128,9 +128,37 @@ class WorkoutBottomBar extends ConsumerWidget {
     if (session != null) {
       return WorkoutActiveBar(
         session: session,
-        onFinishEarly: () => ref
-            .read(workoutSessionNotifierProvider(workoutId).notifier)
-            .finishEarly(),
+        onFinishEarly: () async {
+          final hasLoggedSets = session.exerciseLogs.values
+              .any((log) => log.completedSetsCount > 0);
+
+          if (!hasLoggedSets) {
+            final confirm = await showDialog<bool>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('No sets logged'),
+                content: const Text(
+                  'You haven\'t logged any sets yet. Are you sure you want to finish this workout?',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: const Text('Keep Going'),
+                  ),
+                  FilledButton.tonal(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text('Finish Anyway'),
+                  ),
+                ],
+              ),
+            );
+            if (confirm != true) return;
+          }
+
+          ref
+              .read(workoutSessionNotifierProvider(workoutId).notifier)
+              .finishEarly();
+        },
       );
     }
 

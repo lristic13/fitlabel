@@ -270,18 +270,24 @@ class ExerciseCardSetsReps extends StatelessWidget {
       color: theme.colorScheme.onSurfaceVariant,
     );
 
-    return Row(
+    return Wrap(
+      spacing: 4,
+      runSpacing: 4,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text('${entry.sets} sets', style: metaStyle),
-        const SizedBox(width: 4),
         Text('x', style: metaStyle),
-        const SizedBox(width: 4),
         Text('${entry.reps} reps', style: metaStyle),
-        const SizedBox(width: 12),
-        Icon(Icons.timer_outlined,
-            size: 14, color: theme.colorScheme.onSurfaceVariant),
-        const SizedBox(width: 2),
-        Text('${entry.restSeconds}s rest', style: metaStyle),
+        const SizedBox(width: 8),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.timer_outlined,
+                size: 14, color: theme.colorScheme.onSurfaceVariant),
+            const SizedBox(width: 2),
+            Text('${entry.restSeconds}s rest', style: metaStyle),
+          ],
+        ),
       ],
     );
   }
